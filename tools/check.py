@@ -22,7 +22,9 @@ def main():
     for path in legacy_shells:
         subprocess.run(['bash','-n',str(ROOT/path)],check=True)
     if shutil.which('shellcheck'):
-        subprocess.run(['shellcheck','--shell=busybox','--severity=warning']+[str(ROOT/p) for p in shells if p!='build.sh'],check=True)
+        # These new scripts use the POSIX subset supported by BusyBox ash.
+        # The 'sh' profile also works with older distro ShellCheck releases.
+        subprocess.run(['shellcheck','--shell=sh','--severity=warning']+[str(ROOT/p) for p in shells],check=True)
     scripts=['system/www/cozy/app.js','system/www/cozy/pixels.js','system/www/cozy/glyphs.js',
              'web/WebApp/common/js/deviceinformation.js.gz','web/WebApp/common/js/cozy-launch.js.gz','web/WebApp/common/js/main.js.gz']
     for path in scripts:
