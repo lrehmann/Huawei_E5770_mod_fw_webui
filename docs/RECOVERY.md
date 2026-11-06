@@ -1,12 +1,36 @@
 # Backup and recovery for the experimental E5770 build
 
-Read [INSTALL.md](INSTALL.md) first. No recovery procedure has been performed on
-the attached hotspot. A complete firmware package is not a backup of a specific
-unit's NV, calibration, identity, bad-block state or current configuration.
+Read [INSTALL.md](INSTALL.md) first. Button-entry download mode and host USB
+enumeration have been checked on the attached hotspot. No recovery loader,
+firmware transfer or restore has been performed. A complete firmware package is
+not a backup of a specific unit's NV, calibration, identity, bad-block state or
+current configuration.
 
 The current [preflash checkpoint](PREFLASH.md) records verified private settings
 snapshots, pinned E5770 loader candidates and the remaining raw-backup/recovery
 gates. An offline erase-suppression patch check is not a successful recovery boot.
+
+## Observed download-mode entry
+
+The [upstream E5770 release instructions](https://github.com/Huawei-LTE-routers-mods/Huawei_E5770_mod_fw_webui/releases/tag/v2.3.2)
+describe entering download mode with the device off: hold the labeled Reset
+button, press Power, then release the buttons as it starts. The owner performed
+this sequence and observed the download/update screen. Use the labeled button,
+not an unidentified circuit-board pad; holding Reset alone while running can
+reset settings.
+
+On this unit, the settled identity was Huawei `12d1:1442`, with a vendor
+interface plus installer mass storage. WSL USB forwarding created `/dev/ttyUSB0`;
+no serial port was opened and no protocol or loader was sent. The corresponding
+native Windows vendor interface lacks a driver (problem code 28). USB forwarding
+was detached/unshared afterward and its temporary firewall allowance removed.
+
+To leave this mode after an inspection, hold Power until off, then start with
+Power only, without Reset. Confirm the normal status screen before continuing.
+The owner completed this exit sequence; the normal screen and PC installer-mode
+identity `12d1:1f01` returned, with USB forwarding detached/unshared.
+This button-entry mode does not prove BootROM entry, raw backup capability,
+signature acceptance or recovery after damage to the bootloader/partition table.
 
 ## Before writing firmware
 

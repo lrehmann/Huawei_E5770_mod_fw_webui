@@ -29,11 +29,28 @@
       "protocol": "50",
       "kind": "Virtual installer mass storage only"
     },
-    "serial_or_adb_interface_exposed": false,
+    "normal_mode_serial_or_adb_interface_exposed": false,
+    "pc_download": {
+      "owner_observed_screen": "Download/update",
+      "entry": "Power off, then labeled Reset + Power",
+      "vid": "12d1",
+      "pid": "1442",
+      "configurations": 1,
+      "interfaces": 2,
+      "vendor_interface": "ff/ff/ff",
+      "mass_storage_interface": "08/06/50",
+      "linux_serial_node": "/dev/ttyUSB0",
+      "native_windows_vendor_interface_problem_code": 28,
+      "serial_port_opened": false,
+      "read_or_flash_protocol_tested": false,
+      "return_to_normal_boot": "Owner confirmed normal screen after Power-only restart; PC returned to 12d1:1f01",
+      "normal_return_confirmed": true
+    },
     "normal_pc_wsl_passthrough_tested": true,
     "wsl_ipv4_routes_unchanged": true,
     "device_restored_unshared": true,
-    "recovery_mode_transport_tested": false
+    "download_pc_wsl_enumeration_tested": true,
+    "bootrom_transport_tested": false
   },
   "settings_backup": {
     "authenticated_responses": 19,
@@ -65,6 +82,8 @@
     "ram_uploader_built_on_pc": true,
     "uploader_offline_map_rows": 20,
     "loader_sent_to_device": false,
+    "button_entry_download_mode_observed": true,
+    "bootrom_entry_tested": false,
     "recovery_boot_tested": false,
     "nv_restore_tested": false,
     "installed_version_stock_rollback_obtained": false
@@ -93,7 +112,7 @@
     "Physical model/board and live partition/NAND geometry confirmation",
     "Trusted privileged read path without first overwriting stock firmware",
     "Consistent full-size repeated raw NAND/NV and required OOB/ECC/bad-block captures",
-    "Device-specific recovery entry and non-erasing recovery boot test",
+    "Device-specific BootROM entry and non-erasing recovery boot/read/restore protocol test",
     "Compatible installed-version rollback and stock-to-mod transition",
     "Sustained power/battery and filesystem capacity validation"
   ]

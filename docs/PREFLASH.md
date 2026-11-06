@@ -1,8 +1,10 @@
 # Compatibility and backup checkpoint
 
 Checked November 5, 2026, America/Los_Angeles. **The device is not cleared for
-flashing.** No firmware, NV, USB-composition or power-state change was made.
-Native admin authentication was used for read-only configuration snapshots.
+flashing.** No firmware or NV write command was sent, and no recovery loader was
+loaded. Native admin authentication was used for read-only configuration
+snapshots. The owner subsequently used Reset + Power to enter download mode;
+only USB descriptors and host serial-node enumeration were inspected.
 
 ## Confirmed on the connected unit
 
@@ -15,6 +17,8 @@ Native admin authentication was used for read-only configuration snapshots.
 | Purchase-record model supplied by the owner | White `E5770s-320`; physical label not independently read |
 | USB on the Mac | Huawei `12d1:14db`, CDC ECM control and data interfaces; no Huawei serial or ADB interface exposed |
 | USB on the work PC | Huawei `12d1:1f01`, installer mode; Linux descriptors confirm one mass-storage interface and no serial node |
+| Button-entry download mode | Owner observed the download/update screen; Huawei `12d1:1442`, one vendor interface and one mass-storage interface |
+| Download serial transport | WSL exposed `/dev/ttyUSB0`; the port was not opened. Windows interface 0 has no driver (problem code 28) |
 | Management | Native HTTP server on 80; another native HTTP redirect listener on 8080 |
 | Available shell paths | No ADB device; tested SSH, Telnet, alternate Telnet and TCP ADB ports refused connections |
 | Battery during inspection | 18%, charging; capacity/health and sustained power behavior untested |
@@ -68,8 +72,9 @@ write anything or that the unit will accept/boot it.
 The [upstream signature inspector](https://github.com/Huawei-LTE-routers-mods/balong-signcheck)
 reports no first-stage secuboot signature in the E5770 candidates. This is not
 an OEM authenticity check and does not reveal the connected unit's fuse policy.
-DDR/NAND compatibility, actual recovery entry and loader execution remain
-unverified. The [upstream loader documentation](https://github.com/forth32/balong-usbdload)
+DDR/NAND compatibility, BootROM entry and loader execution remain unverified.
+The button-entry download mode described below does not establish these.
+The [upstream loader documentation](https://github.com/forth32/balong-usbdload)
 explains why an ordinary loader can erase device-specific data; its `-c` erase
 protection override and `-b` bad-block bypass are not part of this plan.
 
@@ -101,8 +106,23 @@ A temporary rule scoped to the WSL guest allowed a normal-mode passthrough test.
 Linux read the Huawei USB descriptors, finding only the installer mass-storage
 interface. No code was loaded into the device. WSL IPv4 routes were unchanged.
 The device was detached/unshared afterward, its original installer CD was
-visible in Windows again, and the temporary allow rule was removed. Normal USB
-forwarding is tested; forwarding in download/BootROM modes is not.
+visible in Windows again, and the temporary allow rule was removed.
+
+The owner then entered download mode using the documented Reset + Power
+sequence. The settled USB identity was `12d1:1442`. WSL passthrough exposed
+two interfaces: vendor class/subclass/protocol `ff/ff/ff`, and mass storage
+`08/06/50`. Linux created `/dev/ttyUSB0`; this check did not open the serial port
+or test any flash/read protocol. Windows has no installed driver for the vendor
+interface (problem code 28), so the tested path is WSL rather than native Windows
+serial access. Routes were unchanged; the device was detached/unshared again,
+the inbound-deny guard was confirmed enabled and the temporary allow removed.
+Normal and download-mode USB enumeration are tested. BootROM transport,
+firmware transfer, raw flash reads and recovery execution are not.
+The owner then restarted with Power only and confirmed the normal status
+screen. Windows again enumerated `12d1:1f01`, with no `1442` interface present.
+The normal-mode device is unshared; the inbound-deny guard remains enabled and
+the temporary allow rule is absent. This confirms exit from the download-mode
+inspection, not a firmware restore or a boot of Cozy.
 
 The pinned RAM uploader was built in an isolated user directory in WSL and
 parsed the loader's 20-partition map in offline mode. Existing WSL services and
@@ -122,8 +142,10 @@ The remaining requirements are:
    data consistently. YAFFS/NAND restoration may require OOB/ECC and bad-block
    metadata; plain `cat` or `mtdblock` copies alone are insufficient.
 3. Establish compatible installed-version recovery software and a verified
-   device-specific recovery-entry method. Prove a non-erasing recovery boot and
-   its host USB transport, ideally on a spare matching unit.
+   BootROM entry method for loss of the ordinary download mode. Button-entry
+   download enumeration is confirmed, but a non-erasing recovery boot and
+   usable read/restore protocol still need qualification, ideally on a spare
+   matching unit.
 4. Verify the stock-to-service/mod transition from `21.318.01.00.00`, sustained
    power/battery condition, filesystem capacity and a usable management path
    with Cozy's ECM research patch disabled.
