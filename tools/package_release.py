@@ -18,10 +18,14 @@ def package_release(bundle, output):
     members = {name: (bundle/name).read_bytes() for name in ('MANIFEST.json', 'SHA256SUMS')}
     for value in report['images'].values():
         members[value['file']] = (bundle/value['file']).read_bytes()
-    for name in ('INSTALL.md', 'RECOVERY.md', 'BUILD.md'):
-        members[name] = (ROOT/'docs'/name).read_bytes()
+    for name in ('INSTALL.md', 'RECOVERY.md', 'BUILD.md', 'PREFLASH.md'):
+        # Guides sit at the ZIP root; keep source-repository links usable offline.
+        data = (ROOT/'docs'/name).read_bytes()
+        members[name] = data.replace(b'(../firmware/recovery.lock.json)', b'(RECOVERY_LOCK.json)')
     members['NOTICE.md'] = (ROOT/'NOTICE.md').read_bytes()
     members['FLASHER_LOCK.json'] = (ROOT/'firmware/flasher.lock.json').read_bytes()
+    members['RECOVERY_LOCK.json'] = (ROOT/'firmware/recovery.lock.json').read_bytes()
+    members['PREFLIGHT.json'] = (ROOT/'audit/preflash-compatibility.json').read_bytes()
     members['VALIDATION.json'] = (json.dumps(report, indent=2)+'\n').encode()
     members['README.txt'] = (
         f'Cozy E5770 {report["version"]} — {variant}\n\n'

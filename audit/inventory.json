@@ -3,7 +3,7 @@
   "scope": "repository filesystem trees; static inspection, not a complete binary security audit",
   "counts": {
     "files": 1329,
-    "bytes": 32413346,
+    "bytes": 32413357,
     "elfs": 131,
     "text_files_scanned": 927,
     "xml_valid": 206,
@@ -1410,8 +1410,8 @@
     {
       "path": "system/bin/cozy-admin",
       "kind": "file",
-      "bytes": 3757,
-      "sha256": "ee7d8f7e388ab964d8d7554a2b2a69432aee9c64224dd14061e97bc5e1704cab"
+      "bytes": 3765,
+      "sha256": "140b9d10e9ecb27586c5e5889b0d875e56d65241d8f0aa7387a1393057b704e9"
     },
     {
       "path": "system/bin/cozy-apply",
@@ -3369,8 +3369,8 @@
     {
       "path": "system/www/cozy/cgi-bin/settings.cgi",
       "kind": "file",
-      "bytes": 7037,
-      "sha256": "bcfeb2f7d5e374f7f695e680148940b32af8eeaf2afef5d18e12bd769bd38297",
+      "bytes": 7039,
+      "sha256": "25025c666f8f0055fb96059ce60a398edd75acbc33661bc255e1fe2e01ef659e",
       "review_flags": {
         "http_urls": {
           "count": 4,
@@ -6822,9 +6822,9 @@
     {
       "path": "web/WebApp/common/js/cozy-launch.js.gz",
       "kind": "file",
-      "bytes": 262,
-      "sha256": "ee6ba9b9c330d1cf176971a0621e22141cff0bbbb742a8d497f5e471df3dda5e",
-      "gzip_uncompressed_bytes": 322
+      "bytes": 263,
+      "sha256": "a6dc59f6456f5fc8b7fa6cf11adebab3731c177e14cb8c084d5b7d09958dbc28",
+      "gzip_uncompressed_bytes": 323
     },
     {
       "path": "web/WebApp/common/js/cradleDisconnected.js.gz",

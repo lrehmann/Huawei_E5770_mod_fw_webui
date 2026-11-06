@@ -4,6 +4,10 @@ Read [INSTALL.md](INSTALL.md) first. No recovery procedure has been performed on
 the attached hotspot. A complete firmware package is not a backup of a specific
 unit's NV, calibration, identity, bad-block state or current configuration.
 
+The current [preflash checkpoint](PREFLASH.md) records verified private settings
+snapshots, pinned E5770 loader candidates and the remaining raw-backup/recovery
+gates. An offline erase-suppression patch check is not a successful recovery boot.
+
 ## Before writing firmware
 
 Keep a private record of the device label/variant, hardware revision, current
@@ -49,6 +53,12 @@ need the correct NAND format and tooling; the upstream
 [Balong raw-dump tools](https://github.com/Huawei-LTE-routers-mods/balong-raw-dump-tools)
 convert a programmer dump and are not a tool that reads the router over ADB.
 
+For YAFFS partitions, a matching logical read alone is not a verified restorable
+backup: OOB tags can be essential. Obtain the appropriate `nanddump` capture,
+including OOB and bad-block/ECC information, with tool options verified for that
+exact build. A live mutable partition also needs a consistency strategy. See
+the [E5770 maintainer's warning](https://4pda.to/forum/index.php?showtopic=818849&st=540).
+
 ## If the native interface fails but download mode works
 
 1. Preserve the flasher log and the exact image hashes. Avoid repeated partial
@@ -79,7 +89,10 @@ nor its suitability as rollback has been validated here.
 ## If download mode is gone
 
 BootROM recovery may require opening the unit, an exact E5770-compatible RAM
-loader, and a device-specific test point. The generic
+loader, and a device-specific test point. The pinned candidate in
+[`recovery.lock.json`](../firmware/recovery.lock.json) matches the reference
+partition table and erase-suppression patch, but is unsigned and has not been
+loaded on this unit. The generic
 [balong-usbdload](https://github.com/forth32/balong-usbdload) utility alone does
 not establish those prerequisites. A loader for E3372/E5377 is not evidence of
 E5770 compatibility. This project does not supply a verified E5770 loader/test

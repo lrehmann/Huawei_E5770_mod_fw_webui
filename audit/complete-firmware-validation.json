@@ -1,21 +1,21 @@
 {
-  "version": "0.1.0-alpha.1",
+  "version": "0.1.0-alpha.2",
   "hardware_validated": false,
   "oem_signature_validated": false,
   "direct_stock_install_validated": false,
   "complete_flash_set": true,
   "standard": {
     "verified": true,
-    "version": "0.1.0-alpha.1",
+    "version": "0.1.0-alpha.2",
     "images": {
       "firmware": {
-        "file": "Cozy_E5770_0.1.0-alpha.1_FW.BIN",
-        "sha256": "6fc694940b35dd2af95b0e0095e9f61f75b2988b88963ccf5869735c08411ed4",
+        "file": "Cozy_E5770_0.1.0-alpha.2_FW.BIN",
+        "sha256": "4ed370924551b73d76f12389c29e659074d320bb69ccd54bb0018155b757a8f4",
         "partitions": 10
       },
       "webui": {
-        "file": "Cozy_E5770_0.1.0-alpha.1_WEBUI.BIN",
-        "sha256": "204345edfa0d903cb77a86f189bc72a9409fb586619a38b4acbf7310c62123dc",
+        "file": "Cozy_E5770_0.1.0-alpha.2_WEBUI.BIN",
+        "sha256": "30823938aa0df4b0e183a1df314afacddeb4c5474c6889208ef11e596e72f5cd",
         "partitions": 3
       }
     },
@@ -25,16 +25,16 @@
   },
   "personalization": {
     "verified": true,
-    "version": "0.1.0-alpha.1",
+    "version": "0.1.0-alpha.2",
     "images": {
       "firmware": {
-        "file": "Cozy_E5770_0.1.0-alpha.1_ADMIN_FW.BIN",
-        "sha256": "efa450dd247e642cc3dc539669780dbe10f0ba53736f5a6cb03f83f3548b1619",
+        "file": "Cozy_E5770_0.1.0-alpha.2_ADMIN_FW.BIN",
+        "sha256": "ac3aa9cfc665ae81ac13429a792f8e4d1b3aaa085d4aa1842e3f322487d21c20",
         "partitions": 10
       },
       "webui": {
-        "file": "Cozy_E5770_0.1.0-alpha.1_WEBUI.BIN",
-        "sha256": "204345edfa0d903cb77a86f189bc72a9409fb586619a38b4acbf7310c62123dc",
+        "file": "Cozy_E5770_0.1.0-alpha.2_WEBUI.BIN",
+        "sha256": "30823938aa0df4b0e183a1df314afacddeb4c5474c6889208ef11e596e72f5cd",
         "partitions": 3
       }
     },
@@ -58,7 +58,8 @@
     "hardware_flashing_tested": false,
     "results": [
       {
-        "file": "Cozy_E5770_0.1.0-alpha.1_FW.BIN",
+        "file": "Cozy_E5770_0.1.0-alpha.2_FW.BIN",
+        "sha256": "4ed370924551b73d76f12389c29e659074d320bb69ccd54bb0018155b757a8f4",
         "exit_code": 0,
         "partition_rows": 10,
         "rows": [
@@ -75,7 +76,8 @@
         ]
       },
       {
-        "file": "Cozy_E5770_0.1.0-alpha.1_WEBUI.BIN",
+        "file": "Cozy_E5770_0.1.0-alpha.2_WEBUI.BIN",
+        "sha256": "30823938aa0df4b0e183a1df314afacddeb4c5474c6889208ef11e596e72f5cd",
         "exit_code": 0,
         "partition_rows": 3,
         "rows": [
@@ -86,6 +88,7 @@
       }
     ]
   },
-  "unit_tests": 42,
-  "source_check_report": "audit/verification.json"
+  "unit_tests": 43,
+  "source_check_report": "audit/verification.json",
+  "change": "Move optional companion from conflicting stock port 8080 to 18080"
 }

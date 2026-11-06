@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "purpose": "Offline E5770 recovery candidate provenance; not hardware qualification",
+  "usbloader_source": {
+    "repository": "https://github.com/forth32/balong-usbdload",
+    "commit": "4fa8b92d654ca9a14274873cf38c45a8cc3923f3"
+  },
+  "candidate": {
+    "file": "usblsafe-e5770.bin",
+    "url": "https://raw.githubusercontent.com/forth32/balong-usbdload/4fa8b92d654ca9a14274873cf38c45a8cc3923f3/usblsafe-e5770.bin",
+    "bytes": 6082057,
+    "sha256": "073e3a2fa207258667ed6345a6a2700e9909992e6c5e2171796fd891ce95ebc7",
+    "first_stage_signature_present": false,
+    "hardware_compatibility_verified": false
+  },
+  "erase_suppression": {
+    "comparison_original_sha256": "230ebfcaa62c78250e4e25920d051daca9c62702dade0b788bdf6381cf0bf40d",
+    "patcher": "patcher.c: pv7r11 / sigburn_v7r11",
+    "signature_offset": 4616,
+    "patch_offset": 4676,
+    "before_hex": "491200eb",
+    "after_hex": "0000a0e3",
+    "all_other_bytes_identical": true,
+    "patch_replay_verified": true,
+    "hardware_erase_behavior_verified": false
+  },
+  "embedded_partition_table": {
+    "offset": 185480,
+    "bytes": 2048,
+    "sha256": "4003fdff8593ec2fca4f75d0c22622c0cf11b7b2d65f03455ef8cfb25451182d",
+    "matches_cozy_and_supplied_stock_21_327": true,
+    "live_device_table_compared": false
+  },
+  "signature_inspector": {
+    "repository": "https://github.com/Huawei-LTE-routers-mods/balong-signcheck",
+    "commit": "1f35484d99b5abfe68985bbbf06464d1ecc51aff",
+    "result": "Exit 3: no first-stage secuboot signature found; this does not read device efuses"
+  },
+  "recovery_boot_tested": false,
+  "nv_restore_tested": false,
+  "exact_installed_stock_21_318_rollback_obtained": false
+}

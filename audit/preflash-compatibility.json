@@ -1,0 +1,100 @@
+{
+  "review_date_local": "2026-11-05 America/Los_Angeles",
+  "firmware_release": "0.1.0-alpha.2",
+  "flash_clearance": "NOT CLEARED",
+  "live_device": {
+    "api_name": "E5770S",
+    "hardware": "CL2E5770SM",
+    "firmware": "21.318.01.00.00",
+    "webui": "17.100.14.01.00",
+    "owner_purchase_record_model": "E5770s-320 white",
+    "physical_label_independently_read": false,
+    "battery_at_initial_check_percent": 18,
+    "charging": true,
+    "health_capacity_tested": false
+  },
+  "usb": {
+    "mac": {
+      "vid": "12d1",
+      "pid": "14db",
+      "interfaces": "CDC ECM control and data"
+    },
+    "pc_normal": {
+      "vid": "12d1",
+      "pid": "1f01",
+      "configurations": 1,
+      "interfaces": 1,
+      "class": "08",
+      "subclass": "06",
+      "protocol": "50",
+      "kind": "Virtual installer mass storage only"
+    },
+    "serial_or_adb_interface_exposed": false,
+    "normal_pc_wsl_passthrough_tested": true,
+    "wsl_ipv4_routes_unchanged": true,
+    "device_restored_unshared": true,
+    "recovery_mode_transport_tested": false
+  },
+  "settings_backup": {
+    "authenticated_responses": 19,
+    "xml_parsed": true,
+    "two_reads_identical": true,
+    "archive_members_read_back_and_hashed": true,
+    "archive_cross_host_sha256_verified": true,
+    "private_copies": "Mac and work PC; paths and contents excluded from Git",
+    "automatic_device_restore_tested": false
+  },
+  "installer_cdrom_backup": {
+    "bytes": 5515264,
+    "two_independent_reads_match": true,
+    "mac_copy_matches": true,
+    "is_firmware_nv_backup": false
+  },
+  "raw_backups": {
+    "full_flash_obtained": false,
+    "nv_calibration_obtained": false,
+    "nand_oob_ecc_bad_block_capture_obtained": false,
+    "live_partition_map_obtained": false
+  },
+  "recovery": {
+    "candidates_locked_in": "firmware/recovery.lock.json",
+    "reference_partition_tables_identical": true,
+    "candidate_erase_suppression_patch_replay_matches": true,
+    "first_stage_signature_present": false,
+    "device_efuse_policy_read": false,
+    "ram_uploader_built_on_pc": true,
+    "uploader_offline_map_rows": 20,
+    "loader_sent_to_device": false,
+    "recovery_boot_tested": false,
+    "nv_restore_tested": false,
+    "installed_version_stock_rollback_obtained": false
+  },
+  "host_preparation": {
+    "pc": "Windows 11 x64 with existing WSL2",
+    "usbipd_version": "5.3.0",
+    "installer_sha256": "1c984914aec944de19b64eff232421439629699f8138e3ddc29301175bc6d938",
+    "authenticode": "Valid",
+    "installer_exit": 0,
+    "reboot_required": false,
+    "reboot_performed": false,
+    "new_broad_inbound_allow_rule_disabled": true,
+    "staging_inbound_deny_enabled": true,
+    "temporary_inspection_allow_rule_removed": true,
+    "existing_wsl_shutdown_or_package_changes": false
+  },
+  "compatibility_fix": {
+    "finding": "Native stock HTTP redirect listener occupies 8080",
+    "cozy_companion_port": 18080,
+    "standard_build_enabled_by_default": false,
+    "physical_cozy_boot_tested": false,
+    "regression_tests": 43
+  },
+  "remaining": [
+    "Physical model/board and live partition/NAND geometry confirmation",
+    "Trusted privileged read path without first overwriting stock firmware",
+    "Consistent full-size repeated raw NAND/NV and required OOB/ECC/bad-block captures",
+    "Device-specific recovery entry and non-erasing recovery boot test",
+    "Compatible installed-version rollback and stock-to-mod transition",
+    "Sustained power/battery and filesystem capacity validation"
+  ]
+}

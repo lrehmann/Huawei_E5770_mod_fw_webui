@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "format": "cozy-complete-experimental-firmware",
-  "version": "0.1.0-alpha.1",
+  "version": "0.1.0-alpha.2",
   "base_release": "v2.3.2",
   "firmware_version": "21.329.01.00.00",
   "webui_version": "17.100.19.01.00",
@@ -9,8 +9,8 @@
   "admin_enabled_by_default": false,
   "filesystem_source_sha256": {
     "app": "759311039575b588dbc247980302c15bab971634fa8bd311a7360f70536d82b7",
-    "system": "305706904af509309309a215b826216e100fbd064b5418d55ded18c106d4c8f3",
-    "web": "e9fdb428bfdeb829ab18be11da759470e3085720ef452cafc612d133845f1728"
+    "system": "76e8125dc698c5531e86e975edab6b5e9d50bb1fda93e2e58e25342e2fc4d0b8",
+    "web": "489df76ae03171e9dcb9a0dc40095f89c0e388ac71e8d2ef1e03ad870167d4b7"
   },
   "complete_flash_set": true,
   "hardware_validated": false,
@@ -19,9 +19,9 @@
   "installation_precondition": "Compatible E5770 modified/technological firmware and a verified recovery path",
   "images": {
     "firmware": {
-      "file": "Cozy_E5770_0.1.0-alpha.1_FW.BIN",
+      "file": "Cozy_E5770_0.1.0-alpha.2_FW.BIN",
       "bytes": 41527832,
-      "sha256": "6fc694940b35dd2af95b0e0095e9f61f75b2988b88963ccf5869735c08411ed4",
+      "sha256": "4ed370924551b73d76f12389c29e659074d320bb69ccd54bb0018155b757a8f4",
       "partitions": [
         {
           "name": "fastboot",
@@ -83,7 +83,7 @@
           "name": "system",
           "code": "00590000",
           "bytes": 19850240,
-          "sha256": "94d7280f20ddeea9a41f694d6186fa62891991ef7da25ffddc919f16fc36daf4",
+          "sha256": "0512bddfd8fd7b89c58914e3596264397144dec7ec4ed3246b4901ec4de334b4",
           "changed": true
         },
         {
@@ -96,9 +96,9 @@
       ]
     },
     "webui": {
-      "file": "Cozy_E5770_0.1.0-alpha.1_WEBUI.BIN",
+      "file": "Cozy_E5770_0.1.0-alpha.2_WEBUI.BIN",
       "bytes": 15313176,
-      "sha256": "204345edfa0d903cb77a86f189bc72a9409fb586619a38b4acbf7310c62123dc",
+      "sha256": "30823938aa0df4b0e183a1df314afacddeb4c5474c6889208ef11e596e72f5cd",
       "partitions": [
         {
           "name": "oeminfo",
@@ -118,7 +118,7 @@
           "name": "web",
           "code": "005b0000",
           "bytes": 9787904,
-          "sha256": "4f97efc2aeb264a444f2e9974076cbd9af8634fd5fd23d204777f24fca06e7c8",
+          "sha256": "a4f89d38802bebbecc8bed10724d14b2a70fa24c8eb6dd9cd148b62ed0c5c477",
           "changed": true
         }
       ]

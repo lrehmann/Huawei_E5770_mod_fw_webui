@@ -61,6 +61,7 @@ Hashes and container evidence are in [provenance.json](../audit/provenance.json)
 | Medium | Device-info API values were concatenated into HTML. | Escaped values at that sink. Other legacy HTML sinks remain for review; this is not a completed WebUI XSS audit. |
 | Medium | Wi-Fi password display was enabled by default. | Disabled that WebUI default. Existing NV settings and alternate screen paths may override it; verify actual behavior after a backed-up deployment. WPS configuration/reachability still needs separate assessment. |
 | Medium | New customization service adds a privileged parser and an old BusyBox HTTP surface. | Implemented bounded ASCII-only data parsing, exact schema, no `eval`/`source`, per-request native-session verification, per-boot CSRF, Host/Referer checks, atomic profile writes, LAN binding/filtering and no CORS. It remains off by default. Replace or validate the HTTP implementation and native session semantics before enabling on hardware. |
+| Medium | The connected stock unit already has a native HTTP redirect listener on the companion's original port 8080. | Alpha.2 moves the listener, firewall, authority checks and menu launcher to 18080. Regression checks reject native-port requests and keep Cozy firewall rules on the new port. Stock 18080 refused connections; compatibility on the new firmware remains a hardware test. |
 | Medium | OLED hooks and ECM/MAC patches depend on exact binary addresses/ABI. | Added SHA-256 build locks for the critical unchanged application binaries. Skipped ECM menu selection without its opt-in. This does not validate every kernel-address assumption or make the installed 21.318 kernel compatible with the 21.329 application image. |
 | High | A Git-only filesystem rebuild omitted empty `app/webroot` and `WebApp/common/autorun` directories and discarded vendor owner metadata. | Added a complete base layout and canonical filesystem recipe. Both CPIO and full-image builders now restore the empty directories, preserve vendor modes/UID/GID, and fail on missing base files without reviewed deletions. Regression tests check the mountpoint and ownership. |
 | Medium | The separately available 128×64 OLED hook source has inclusive upper-bound checks on menu/script indices. | Prepared `rebuild/oled-bounds.patch` and verified it applies to the pinned source. It rejects invalid mapping indices and excludes the past-the-end script index. The binary library is unchanged; the fix needs a rebuild and ARM/hardware validation. |
@@ -113,3 +114,7 @@ signature is created or authenticated. Direct installation from stock 21.318
 remains unverified. The hardware gates are listed in
 [DEVELOPMENT.md](DEVELOPMENT.md), with supported-path instructions in
 [INSTALL.md](INSTALL.md).
+
+The read-only [preflash checkpoint](PREFLASH.md) adds current device identity,
+private configuration snapshots and static E5770 recovery-loader checks. No
+raw NV/NAND backup, recovery boot or device firmware write has been completed.

@@ -21,10 +21,11 @@ Based on upstream commit `a4b7711f7564bfd408ce925564b128e05c20313d`, firmware
 
 ## Firmware and installation
 
-- [Download the complete standard set](https://github.com/lrehmann/Huawei_E5770_mod_fw_webui/releases/download/cozy-v0.1.0-alpha.1/Cozy_E5770_0.1.0-alpha.1_standard.zip)
-- [Optional personalization-enabled set](https://github.com/lrehmann/Huawei_E5770_mod_fw_webui/releases/download/cozy-v0.1.0-alpha.1/Cozy_E5770_0.1.0-alpha.1_personalization.zip)
+- [Download the complete standard set](https://github.com/lrehmann/Huawei_E5770_mod_fw_webui/releases/download/cozy-v0.1.0-alpha.2/Cozy_E5770_0.1.0-alpha.2_standard.zip)
+- [Optional personalization-enabled set](https://github.com/lrehmann/Huawei_E5770_mod_fw_webui/releases/download/cozy-v0.1.0-alpha.2/Cozy_E5770_0.1.0-alpha.2_personalization.zip)
 - [Committed BIN images, manifest and checksums](firmware/experimental/)
 - [Linux/Windows installation instructions](docs/INSTALL.md) · [Backup and recovery](docs/RECOVERY.md) · [Rebuild instructions](docs/BUILD.md)
+- [Connected-device compatibility and backup checkpoint](docs/PREFLASH.md)
 
 The two BIN files retain all **10 main-firmware partitions and 3 WebUI-package
 partitions** from the pinned base, including its kernel, modem, bootloader,
@@ -86,7 +87,7 @@ can be refreshed with `python3 tools/generate_assets.py`.
 ## Device implementation
 
 On a validated development device, the companion listens on the private `br0`
-IPv4 address at port 8080. The standard set keeps it **disabled by default** while
+IPv4 address at port 18080. The standard set keeps it **disabled by default** while
 native-session, boot, and firewall compatibility remain untested. The optional
 personalization build (`--enable-admin`) explicitly enables its boot default.
 An existing trusted root shell can also use `cozy-admin enable`;

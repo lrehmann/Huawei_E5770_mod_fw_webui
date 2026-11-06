@@ -1,6 +1,6 @@
 # Install Cozy on a Huawei E5770
 
-Version: `0.1.0-alpha.1`, based on firmware `21.329.01.00.00` and WebUI
+Version: `0.1.0-alpha.2`, based on firmware `21.329.01.00.00` and WebUI
 `17.100.19.01.00` / upstream mod `v2.3.2`.
 
 The repository contains a **complete experimental two-image flash set**. All 10
@@ -26,6 +26,9 @@ The photos in the [repository](https://github.com/lrehmann/Huawei_E5770_mod_fw_w
 are appearance references supplied by the user. A matching case is not a model,
 variant, partition-map or firmware-compatibility check.
 
+Read the latest [preflash checkpoint](PREFLASH.md). Configuration and installer-CD
+backups were obtained, but raw NAND/NV backups and a recovery boot remain open.
+
 Record the exact model/variant, hardware revision, current firmware/WebUI,
 partition sizes, SIM/APN configuration and existing USB composition. Have a
 working Stock/RNDIS USB composition before upgrading; the legacy ECM kernel
@@ -46,8 +49,8 @@ has the same files at its top level.
 
 | File | Contents |
 | --- | --- |
-| `Cozy_E5770_0.1.0-alpha.1_FW.BIN` | Full 10-partition firmware, including the matching kernel/modem/boot components and Cozy system/app |
-| `Cozy_E5770_0.1.0-alpha.1_WEBUI.BIN` | Complete 3-partition WebUI package, including the Cozy menu and screens |
+| `Cozy_E5770_0.1.0-alpha.2_FW.BIN` | Full 10-partition firmware, including the matching kernel/modem/boot components and Cozy system/app |
+| `Cozy_E5770_0.1.0-alpha.2_WEBUI.BIN` | Complete 3-partition WebUI package, including the Cozy menu and screens |
 | `SHA256SUMS` | Expected SHA-256 for both images |
 | `MANIFEST.json` | Per-partition hashes, source fingerprints, variant and validation status |
 
@@ -80,9 +83,9 @@ The **standard** set keeps the experimental customization companion disabled.
 The native router interface and built-in Cozy screens are present.
 
 The optional **personalization** archive contains
-`Cozy_E5770_0.1.0-alpha.1_ADMIN_FW.BIN` plus the same WebUI image. It explicitly
+`Cozy_E5770_0.1.0-alpha.2_ADMIN_FW.BIN` plus the same WebUI image. It explicitly
 opts into starting the native-session-authenticated companion on the private
-LAN at port 8080. Its manifest says `admin_enabled_by_default: true`; the standard
+LAN at port 18080. Its manifest says `admin_enabled_by_default: true`; the standard
 set says `false`. It does not enable Telnet, ADB or NV/kernel-memory patches.
 The old HTTP/crypto dependencies and native-session compatibility still need
 hardware validation; use this variant only on a development network you trust.
@@ -143,8 +146,8 @@ set `COZY_IMAGES` to that extracted directory. The `-m` commands only inspect
 files and exit before opening a serial port:
 
 ```sh
-"$COZY_FLASHER" -m "$COZY_IMAGES/Cozy_E5770_0.1.0-alpha.1_FW.BIN"
-"$COZY_FLASHER" -m "$COZY_IMAGES/Cozy_E5770_0.1.0-alpha.1_WEBUI.BIN"
+"$COZY_FLASHER" -m "$COZY_IMAGES/Cozy_E5770_0.1.0-alpha.2_FW.BIN"
+"$COZY_FLASHER" -m "$COZY_IMAGES/Cozy_E5770_0.1.0-alpha.2_WEBUI.BIN"
 ```
 
 For the personalization archive, use its `ADMIN_FW.BIN` filename in place of the
@@ -166,10 +169,10 @@ In PowerShell, from the extracted image directory:
 
 ```powershell
 Get-FileHash -Algorithm SHA256 .\balong_flash.exe
-Get-FileHash -Algorithm SHA256 .\Cozy_E5770_0.1.0-alpha.1_FW.BIN
-Get-FileHash -Algorithm SHA256 .\Cozy_E5770_0.1.0-alpha.1_WEBUI.BIN
-.\balong_flash.exe -m .\Cozy_E5770_0.1.0-alpha.1_FW.BIN
-.\balong_flash.exe -m .\Cozy_E5770_0.1.0-alpha.1_WEBUI.BIN
+Get-FileHash -Algorithm SHA256 .\Cozy_E5770_0.1.0-alpha.2_FW.BIN
+Get-FileHash -Algorithm SHA256 .\Cozy_E5770_0.1.0-alpha.2_WEBUI.BIN
+.\balong_flash.exe -m .\Cozy_E5770_0.1.0-alpha.2_FW.BIN
+.\balong_flash.exe -m .\Cozy_E5770_0.1.0-alpha.2_WEBUI.BIN
 ```
 
 Match the image hashes to `SHA256SUMS`/`MANIFEST.json`. For personalization, check
@@ -207,17 +210,17 @@ Linux, using the actual serial port identified above:
 ```sh
 COZY_PORT=/dev/ttyUSB0
 # Replace this example with the confirmed download-mode port.
-sudo "$COZY_FLASHER" -p "$COZY_PORT" -k "$COZY_IMAGES/Cozy_E5770_0.1.0-alpha.1_FW.BIN"
+sudo "$COZY_FLASHER" -p "$COZY_PORT" -k "$COZY_IMAGES/Cozy_E5770_0.1.0-alpha.2_FW.BIN"
 # Continue only after a successful first write and the expected download port remains available.
-sudo "$COZY_FLASHER" -p "$COZY_PORT" "$COZY_IMAGES/Cozy_E5770_0.1.0-alpha.1_WEBUI.BIN"
+sudo "$COZY_FLASHER" -p "$COZY_PORT" "$COZY_IMAGES/Cozy_E5770_0.1.0-alpha.2_WEBUI.BIN"
 ```
 
 Windows, replacing `7` with the confirmed COM number:
 
 ```powershell
-.\balong_flash.exe -p 7 -k .\Cozy_E5770_0.1.0-alpha.1_FW.BIN
+.\balong_flash.exe -p 7 -k .\Cozy_E5770_0.1.0-alpha.2_FW.BIN
 # Continue only after a successful first write.
-.\balong_flash.exe -p 7 .\Cozy_E5770_0.1.0-alpha.1_WEBUI.BIN
+.\balong_flash.exe -p 7 .\Cozy_E5770_0.1.0-alpha.2_WEBUI.BIN
 ```
 
 For personalization, substitute its `ADMIN_FW.BIN` in the **first** write only.
@@ -242,7 +245,7 @@ as a stability or security test.
 
 If the companion was explicitly enabled, sign in to the **native** interface at
 that same IP, then use **System → Personalize your hotspot**. The companion is at
-`http://192.168.8.1:8080/cgi-bin/ui.cgi` when that is the actual private `br0` IP.
+`http://192.168.8.1:18080/cgi-bin/ui.cgi` when that is the actual private `br0` IP.
 Select a theme/message and save; screen changes apply at the next normal boot.
 If native-session verification fails, it remains closed. Do not disable auth or
 open the service to WAN to work around it.

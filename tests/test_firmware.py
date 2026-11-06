@@ -210,7 +210,7 @@ class SettingsCGI(ShellHarness):
         (self.run/'bind-address').write_text('192.168.8.1\n');(self.run/'csrf').write_text('a'*64)
 
     def request(self,body=None,**changes):
-        env=dict(self.env,REQUEST_METHOD='GET' if body is None else 'POST',HTTP_HOST='192.168.8.1:8080',HTTP_COOKIE='SessionID=good',QUERY_STRING='',HTTP_REFERER='http://192.168.8.1:8080/cgi-bin/ui.cgi',CONTENT_TYPE='text/plain;charset=UTF-8')
+        env=dict(self.env,REQUEST_METHOD='GET' if body is None else 'POST',HTTP_HOST='192.168.8.1:18080',HTTP_COOKIE='SessionID=good',QUERY_STRING='',HTTP_REFERER='http://192.168.8.1:18080/cgi-bin/ui.cgi',CONTENT_TYPE='text/plain;charset=UTF-8')
         data=b'' if body is None else body if isinstance(body,bytes) else body.encode()
         env['CONTENT_LENGTH']=str(len(data));env.update(changes)
         proc=subprocess.run(['/bin/sh',str(self.script)],input=data,env=env,capture_output=True,timeout=10)
@@ -250,10 +250,16 @@ class SettingsCGI(ShellHarness):
         self.assertEqual(self.request(MOCK_CURL_FAIL='1')[0],503)
 
     def test_wrong_host_origin_csrf_and_method(self):
-        cases=[({'HTTP_HOST':'attacker.example:8080'},403),({'HTTP_REFERER':'http://attacker.example/'},403),
+        cases=[({'HTTP_HOST':'attacker.example:18080'},403),({'HTTP_REFERER':'http://attacker.example/'},403),
                ({'REQUEST_METHOD':'DELETE'},405),({'CONTENT_TYPE':'application/json'},415)]
         for changes,want in cases:self.assertEqual(self.request(self.body(),**changes)[0],want)
         self.assertEqual(self.request(self.body().replace('csrf=aaa','csrf=baa',1))[0],403)
+
+    def test_native_web_ports_are_not_cozy_authorities(self):
+        for host in ('192.168.8.1','192.168.8.1:80','192.168.8.1:8080'):
+            with self.subTest(host=host):
+                self.assertEqual(self.request(HTTP_HOST=host)[0],403)
+        self.assertFalse((self.store/'cozy/profile').exists())
 
     def test_rejects_injection_duplicate_and_truncated_input(self):
         for body in [self.body()+'theme=cloud\n',self.body().replace('label=COZY HOTSPOT','label=$(touch PWN)'),self.body().replace('boot64=', 'bad='),self.body().replace('HELLO FRIEND','BAD\x00NAME')]:
@@ -322,8 +328,12 @@ class AdminService(ShellHarness):
         p=subprocess.run(['/bin/sh',str(script),'start'],env=self.env,capture_output=True,timeout=10)
         self.assertEqual(p.returncode,0,p.stderr)
         commands=(self.root/'commands').read_text()
-        self.assertIn('httpd -f -p 192.168.8.1:8080 -h /system/www/cozy',commands)
+        self.assertIn('httpd -f -p 192.168.8.1:18080 -h /system/www/cozy',commands)
         self.assertEqual((self.run/'csrf').stat().st_mode & 0o777,0o600)
+        rules=json.loads((self.root/'rules.json').read_text())
+        for rule in rules:
+            if '--dport' in rule:
+                self.assertEqual(rule[rule.index('--dport')+1],'18080')
 
 
 class KernelPatchGates(ShellHarness):

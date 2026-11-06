@@ -17,18 +17,18 @@ firewall() {
     addr=$(cat "$RUN/bind-address")
     printf '%s\n' "$addr" | private_ip || return 1
     # Keep a deny guard in place throughout jump replacement.
-    ipt -I INPUT 1 -p tcp --dport 8080 -j REJECT || return 1
+    ipt -I INPUT 1 -p tcp --dport 18080 -j REJECT || return 1
     ipt -N COZY_ADMIN 2>/dev/null || true
     ipt -C COZY_ADMIN -i lo -j ACCEPT 2>/dev/null || ipt -I COZY_ADMIN 1 -i lo -j ACCEPT || return 1
     ipt -C COZY_ADMIN -i br0 -d "$addr" -j ACCEPT 2>/dev/null || ipt -I COZY_ADMIN 1 -i br0 -d "$addr" -j ACCEPT || return 1
     ipt -C COZY_ADMIN -j DROP 2>/dev/null || ipt -A COZY_ADMIN -j DROP || return 1
     # Keep this ahead of native broad ACCEPT rules after every reconnect.
-    while ipt -C INPUT -p tcp --dport 8080 -j COZY_ADMIN 2>/dev/null; do
-        ipt -D INPUT -p tcp --dport 8080 -j COZY_ADMIN || return 1
+    while ipt -C INPUT -p tcp --dport 18080 -j COZY_ADMIN 2>/dev/null; do
+        ipt -D INPUT -p tcp --dport 18080 -j COZY_ADMIN || return 1
     done
-    ipt -I INPUT 1 -p tcp --dport 8080 -j COZY_ADMIN || return 1
-    while ipt -C INPUT -p tcp --dport 8080 -j REJECT 2>/dev/null; do
-        ipt -D INPUT -p tcp --dport 8080 -j REJECT || return 1
+    ipt -I INPUT 1 -p tcp --dport 18080 -j COZY_ADMIN || return 1
+    while ipt -C INPUT -p tcp --dport 18080 -j REJECT 2>/dev/null; do
+        ipt -D INPUT -p tcp --dport 18080 -j REJECT || return 1
     done
 }
 running() {
@@ -66,7 +66,7 @@ case "${1:-status}" in
         fi
         [ "$(wc -c < "$RUN/csrf" | tr -d ' ')" = 64 ] || exit 1
         printf 'I:index.html\n' > "$RUN/httpd.conf"
-        busybox httpd -f -p "$addr:8080" -h "$ROOT" -c "$RUN/httpd.conf" &
+        busybox httpd -f -p "$addr:18080" -h "$ROOT" -c "$RUN/httpd.conf" &
         printf '%s\n' "$!" > "$RUN/pid"
         ;;
     firewall)
@@ -81,6 +81,6 @@ case "${1:-status}" in
         rm -f "$RUN/pid"
         ;;
     enable) touch /data/userdata/cozy_admin_enable; rm -f "$DISABLE"; exec "$0" start;;
-    status) if running; then echo 'Cozy settings is running on the router LAN address, port 8080'; else echo 'Cozy settings is stopped'; fi;;
+    status) if running; then echo 'Cozy settings is running on the router LAN address, port 18080'; else echo 'Cozy settings is stopped'; fi;;
     *) echo 'Usage: cozy-admin start|stop|enable|disable|status|firewall' >&2; exit 2;;
 esac

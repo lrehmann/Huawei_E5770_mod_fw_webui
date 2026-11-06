@@ -21,7 +21,7 @@ reply() {
 }
 addr=$(cat "$RUN/bind-address" 2>/dev/null) || reply '503 Service Unavailable' '{"error":"Service is starting"}'
 case "$addr" in ''|*[!0-9.]*) reply '503 Service Unavailable' '{"error":"Invalid service address"}';; esac
-[ "${HTTP_HOST:-}" = "$addr:8080" ] || reply '403 Forbidden' '{"error":"Use the router LAN address"}'
+[ "${HTTP_HOST:-}" = "$addr:18080" ] || reply '403 Forbidden' '{"error":"Use the router LAN address"}'
 case "${REQUEST_METHOD:-}" in GET|POST) ;; *) reply '405 Method Not Allowed' '{"error":"Method not allowed"}';; esac
 cookie=${HTTP_COOKIE:-}
 [ "${#cookie}" -le 512 ] || reply '401 Unauthorized' '{"error":"Sign in to the router first"}'
@@ -56,7 +56,7 @@ case "$token" in *[!0-9a-f]*) reply '503 Service Unavailable' '{"error":"Service
 
 if [ "$REQUEST_METHOD" = POST ]; then
     [ "${QUERY_STRING:-}" = '' ] || reply '400 Bad Request' '{"error":"Invalid request"}'
-    case "${HTTP_REFERER:-}" in "http://$addr:8080/"*) ;; *) reply '403 Forbidden' '{"error":"Reload settings and try again"}';; esac
+    case "${HTTP_REFERER:-}" in "http://$addr:18080/"*) ;; *) reply '403 Forbidden' '{"error":"Reload settings and try again"}';; esac
     [ "${CONTENT_TYPE:-}" = 'text/plain;charset=UTF-8' ] || \
         [ "${CONTENT_TYPE:-}" = 'text/plain' ] || reply '415 Unsupported Media Type' '{"error":"Expected a settings profile"}'
     length=${CONTENT_LENGTH:-0}
