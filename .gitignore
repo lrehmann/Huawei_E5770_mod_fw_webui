@@ -1,0 +1,9 @@
+.cache/
+build/
+dist/
+.venv/
+__pycache__/
+*.pyc
+*.cpio
+*.cpio.sha256
+.DS_Store

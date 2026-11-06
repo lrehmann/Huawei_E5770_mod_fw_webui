@@ -4,7 +4,7 @@
 <wififeature>
 	<multssidenable>1</multssidenable>
 	<wifiwpssuportwepnone>0</wifiwpssuportwepnone>
-	<oledshowpassword>1</oledshowpassword>
+	<oledshowpassword>0</oledshowpassword>
 	<maxapnum>1</maxapnum>
 	<wifi5g_enabled>0</wifi5g_enabled>
 	<stawpsenabled>0</stawpsenabled>

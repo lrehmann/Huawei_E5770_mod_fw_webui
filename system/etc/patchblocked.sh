@@ -4,7 +4,7 @@
 
 PAGEMAP="$(awk '/r page00/ {print "0x"$1;exit}' /proc/kallsyms)"
 
-function wr_m() {
+wr_m() {
     local i
     local dst
     local src
@@ -21,6 +21,7 @@ function wr_m() {
 
 if [[ "$1" == "boot" ]];
 then
+    if [ -f /data/userdata/cozy_nv_unlock_enable ]; then
     # Patch datalock
     DATALOCK_ADDR="$(awk '/ g_bAtDataLocked/ {print "0x"$1;exit}' /proc/kallsyms)"
     if [[ "$DATALOCK_ADDR" ]];
@@ -50,9 +51,13 @@ then
         echo "nv_writeEx patched"
     fi
     
+    fi
+
     # Patch 'finger' Android USB gadget to use 'ecm' instead
     # Needed for ECM USB autoswitch
     # See drivers/usb/mbb_usb_unitary/hw_pnp_adapt.{c,h} to learn more
     # HACK: hardcoded offset for E5770 21.329.01.00.00
-    wr_m 0xC070FA28 65 63 6D 00
+    if [ -f /data/userdata/cozy_usb_ecm_patch_enable ]; then
+        wr_m 0xC070FA28 65 63 6D 00
+    fi
 fi

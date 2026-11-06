@@ -1,0 +1,32 @@
+[
+  {
+    "file": "UPDATE_WEBUI_17.100.19.01.00_MRE5_mod2.3.BIN",
+    "sha256": "48dcf7ba7ed9982c7ca8852bc2809d06628cdd7c7d0592f26898eb10b154c49b",
+    "archives": [
+      {
+        "offset": 5525272,
+        "kind": "web",
+        "entries": 1187,
+        "different": []
+      }
+    ]
+  },
+  {
+    "file": "E5770s_Update_21.329.01.00.00_mod2.3.2.BIN",
+    "sha256": "e58cce30ac6d37278d5e62be5a7e6d9f56964eaa9493583c86b3111c4dfd20dc",
+    "archives": [
+      {
+        "offset": 18646468,
+        "kind": "system",
+        "entries": 236,
+        "different": []
+      },
+      {
+        "offset": 38416366,
+        "kind": "app",
+        "entries": 170,
+        "different": []
+      }
+    ]
+  }
+]

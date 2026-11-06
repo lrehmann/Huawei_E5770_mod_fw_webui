@@ -39,7 +39,10 @@ then
     fi
     echo $CURRENT_USB_MODE > $CONF_FILE
     # Reset USB if ECM is selected and we're booting
-    [[ "$1" == "boot" ]] && [[ "$CURRENT_USB_MODE" == "2" ]] && ecall pnp_notify_to_switch
+    if [[ "$1" == "boot" ]] && [[ "$CURRENT_USB_MODE" == "2" ]]; then
+        [ -f /data/userdata/cozy_usb_ecm_patch_enable ] || { echo 'ECM kernel patch is not enabled' >&2; exit 1; }
+        ecall pnp_notify_to_switch
+    fi
 else
     CURRENT_USB_MODE="$(cat $CONF_FILE)"
 fi
@@ -66,7 +69,14 @@ fi
 if [[ "$1" == "set_next" ]]
 then
     [[ "$CURRENT_USB_MODE" == "0" ]] && atc "AT^NVWR=50091,60,$MODE_1" && echo 1 > $CONF_FILE && exit 0
-    [[ "$CURRENT_USB_MODE" == "1" ]] && atc "AT^NVWR=50091,60,$MODE_2" && echo 2 > $CONF_FILE && exit 0
+    if [[ "$CURRENT_USB_MODE" == "1" ]]; then
+        if [ -f /data/userdata/cozy_usb_ecm_patch_enable ]; then
+            atc "AT^NVWR=50091,60,$MODE_2" && echo 2 > "$CONF_FILE"
+        else
+            atc "AT^NVWR=50091,60,$MODE_3" && echo 3 > "$CONF_FILE"
+        fi
+        exit "$?"
+    fi
     [[ "$CURRENT_USB_MODE" == "2" ]] && atc "AT^NVWR=50091,60,$MODE_3" && echo 3 > $CONF_FILE && exit 0
     [[ "$CURRENT_USB_MODE" == "3" ]] && atc "AT^NVWR=50091,60,$MODE_4" && echo 4 > $CONF_FILE && exit 0
     [[ "$CURRENT_USB_MODE" == "4" ]] && atc "AT^NVWR=50091,60,$MODE_5" && atc "AT^NVWR=33,4,2,0,0,0" && echo 5 > $CONF_FILE && exit 0

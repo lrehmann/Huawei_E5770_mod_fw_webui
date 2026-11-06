@@ -1,0 +1,64 @@
+{
+  "firmware_upstream": {
+    "repository": "https://github.com/Huawei-LTE-routers-mods/Huawei_E5770_mod_fw_webui",
+    "commit": "a4b7711f7564bfd408ce925564b128e05c20313d",
+    "branch": "fw21.329.01.00.00_web17.100.19.01.00",
+    "release": "v2.3.2"
+  },
+  "oled_source": {
+    "repository": "https://github.com/Huawei-LTE-routers-mods/huawei_oled_hijack",
+    "commit": "8ae8f06c226d972b78f2398ef2232fd7bd109969",
+    "vendored": false,
+    "prepared_patch": "rebuild/oled-bounds.patch",
+    "patch_apply_check_passed": true,
+    "library_rebuilt": false
+  },
+  "user_supplied": [
+    {
+      "file": "E5770s_UPDATE_21.327.01.00.1133_WEBUI_17.100.17.01.1133_MRE5.ZIP",
+      "sha256": "cb9d614aff4f31992f954d7c13d1580b3c806b02a2bb6ce9da7f63dbabcfa305",
+      "actual_format": "Huawei Balong raw update container",
+      "partition_crcs_verified": 13,
+      "authenticity_verified": false
+    },
+    {
+      "file": "E5770s-923_open_src.rar",
+      "sha256": "cd1d0ca23065c539f021fdfcf137d7c41144334b271f7fff6eefc60252f664bf",
+      "archive_members": 9475,
+      "nested_kernel_members": 44377,
+      "kernel_version": "3.4.5",
+      "board_defconfig": "hi6921_v711_e5770s-923_defconfig",
+      "full_source_review_complete": false
+    }
+  ],
+  "ca_bundle": {
+    "source": "https://curl.se/ca/cacert.pem",
+    "checksum_source": "https://curl.se/ca/cacert.pem.sha256",
+    "sha256": "427c064216761a1e72a8b30f0d954d08cb6e4435a82091fb865afd20c8497285",
+    "certificates": 118,
+    "headers": [
+      "##",
+      "## Bundle of CA Root Certificates",
+      "##",
+      "## Certificate data from Mozilla as of: Thu Nov  5 04:12:01 2026 GMT",
+      "##",
+      "## Find updated versions here: https://curl.se/docs/caextract.html",
+      "##",
+      "## This is a bundle of X.509 certificates of public Certificate Authorities",
+      "## (CA). These were automatically extracted from Mozilla's root certificates",
+      "## file (certdata.txt).  This file can be found in the mozilla source tree:",
+      "## https://raw.githubusercontent.com/mozilla-firefox/firefox/refs/heads/release/security/nss/lib/ckfw/builtins/certdata.txt",
+      "##",
+      "## It contains the certificates in PEM format and therefore",
+      "## can be directly used with curl / libcurl / php_curl, or with",
+      "## an Apache+mod_ssl webserver for SSL client authentication.",
+      "## Configure this file as the SSLCACertificateFile.",
+      "##",
+      "## Conversion done with mk-ca-bundle.pl version 1.35.",
+      "## SHA256: 3ec2b4d240dc12c747eaf450061db84af757c483bbda302f9e29ceb5d70be510",
+      "##",
+      "",
+      ""
+    ]
+  }
+}

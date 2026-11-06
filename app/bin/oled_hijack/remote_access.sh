@@ -1,80 +1,80 @@
 #!/system/bin/busybox sh
+# Physical-menu handler. Debug access requires deliberate provisioning first.
+set -eu
+CONF_FILE=/data/userdata/remote_access
+CURRENT_MODE=$(cat "$CONF_FILE" 2>/dev/null || true)
+case "$CURRENT_MODE" in 0|1|2|3|4) ;; *) CURRENT_MODE=0;; esac
 
-# Remote access OLED handler.
-# By ValdikSS, iam@valdikss.org.ru
-
-# telnetd and adbd are listening IPv4 only (0.0.0.0)
-
-CONF_FILE="/data/userdata/remote_access"
-CURRENT_MODE="$(cat $CONF_FILE)"
-TABLE_NAME="SERVICE_INPUT"
-echo $CURRENT_MODE
-
-enable_all () {
-    xtables-multi iptables -D "$TABLE_NAME" -p tcp --dport 80 -j REJECT
-    xtables-multi iptables -D "$TABLE_NAME" -p tcp --dport 23 -j REJECT
-    xtables-multi iptables -D "$TABLE_NAME" -p tcp --dport 5555 -j REJECT
-    xtables-multi ip6tables -D "$TABLE_NAME" -p tcp --dport 80 -j REJECT
-    return 0
+debug_ready() {
+    [ -f /data/userdata/cozy_debug_enable ] || return 1
+    [ -f /data/userdata/passwd ] || return 1
+    hash=$(awk -F: '$1=="root" { print $2; exit }' /data/userdata/passwd)
+    case "$hash" in '$5$'*|'$6$'*) ;; *) return 1;; esac
+    digest=$(printf '%s' "$hash" | sha256sum | cut -d ' ' -f 1)
+    [ "$digest" != "$(cat /system/etc/cozy/upstream-root-hash.sha256)" ]
 }
-
-disable_web () {
-    xtables-multi iptables -I "$TABLE_NAME" -p tcp --dport 80 -j REJECT
-    xtables-multi ip6tables -I "$TABLE_NAME" -p tcp --dport 80 -j REJECT
-    return 0
-}
-
-disable_telnet () {
-    xtables-multi iptables -I "$TABLE_NAME" -p tcp --dport 23 -j REJECT
-    return 0
-}
-
-disable_adb () {
-    xtables-multi iptables -I "$TABLE_NAME" -p tcp --dport 5555 -j REJECT
-    return 0
-}
-
-handle_state () {
-    [[ "$CURRENT_MODE" == "0" ]] || [[ "$CURRENT_MODE" == "" ]] && enable_all && disable_telnet && disable_adb
-    [[ "$CURRENT_MODE" == "1" ]] && enable_all && disable_adb
-    [[ "$CURRENT_MODE" == "2" ]] && enable_all
-    [[ "$CURRENT_MODE" == "3" ]] && enable_all && disable_web
-    [[ "$CURRENT_MODE" == "4" ]] && enable_all && disable_telnet && disable_adb && disable_web
-    return 0
-}
-
-if [[ "$1" == "boot" ]]
-then
-    [[ "$CURRENT_MODE" == "" ]] && CURRENT_MODE="0" && echo "0" > $CONF_FILE
-    handle_state
-    exit 0
-fi
-
-if [[ "$1" == "get" ]]
-then
-    [[ "$CURRENT_MODE" == "0" ]] && exit 0
-    [[ "$CURRENT_MODE" == "1" ]] && exit 1
-    [[ "$CURRENT_MODE" == "2" ]] && exit 2
-    [[ "$CURRENT_MODE" == "3" ]] && exit 3
-    [[ "$CURRENT_MODE" == "4" ]] && exit 4
-
-    # assuming it's not configured yet, all ports open
-    exit 0
-fi
-
-if [[ "$1" == "set_next" ]]
-then
-    if [[ "$CURRENT_MODE" == "0" ]] || [[ "$CURRENT_MODE" == "" ]]; then
-        CURRENT_MODE="1" && echo "1" > $CONF_FILE
-    elif [[ "$CURRENT_MODE" == "1" ]]; then
-        CURRENT_MODE="2" && echo "2" > $CONF_FILE
-    elif [[ "$CURRENT_MODE" == "2" ]]; then
-        CURRENT_MODE="3" && echo "3" > $CONF_FILE
-    elif [[ "$CURRENT_MODE" == "3" ]]; then
-        CURRENT_MODE="4" && echo "4" > $CONF_FILE
-    elif [[ "$CURRENT_MODE" == "4" ]]; then
-        CURRENT_MODE="0" && echo "0" > $CONF_FILE
+debug_ready || CURRENT_MODE=0
+ipt() { xtables-multi iptables "$@"; }
+apply() {
+    # Guards cover rule replacement, including a native reconnect flush.
+    for port in 23 5555; do
+        ipt -C INPUT -p tcp --dport "$port" -j REJECT 2>/dev/null || \
+            ipt -I INPUT 1 -p tcp --dport "$port" -j REJECT || return 1
+    done
+    ipt -N COZY_DEBUG 2>/dev/null || true
+    ipt -F COZY_DEBUG || return 1
+    if [ "$CURRENT_MODE" = 1 ] || [ "$CURRENT_MODE" = 2 ] || [ "$CURRENT_MODE" = 3 ]; then
+        ipt -A COZY_DEBUG -i br0 -p tcp --dport 23 -j ACCEPT || return 1
     fi
-
-    handle_state
+    if [ "$CURRENT_MODE" = 2 ] || [ "$CURRENT_MODE" = 3 ]; then
+        ipt -A COZY_DEBUG -i br0 -p tcp --dport 5555 -j ACCEPT || return 1
+    fi
+    ipt -A COZY_DEBUG -j REJECT || return 1
+    for port in 23 5555; do
+        while ipt -C INPUT -p tcp --dport "$port" -j COZY_DEBUG 2>/dev/null; do
+            ipt -D INPUT -p tcp --dport "$port" -j COZY_DEBUG || return 1
+        done
+        ipt -I INPUT 1 -p tcp --dport "$port" -j COZY_DEBUG || return 1
+        while ipt -C INPUT -p tcp --dport "$port" -j REJECT 2>/dev/null; do
+            ipt -D INPUT -p tcp --dport "$port" -j REJECT || return 1
+        done
+    done
+    if [ "$CURRENT_MODE" = 0 ] || [ "$CURRENT_MODE" = 4 ]; then
+        pkill telnetd 2>/dev/null || true
+        pkill adbd 2>/dev/null || true
+    else
+        [ -f /data/userdata/telnet_disable ] || pidof telnetd >/dev/null || telnetd -l login -b 0.0.0.0
+        if [ "$CURRENT_MODE" = 2 ] || [ "$CURRENT_MODE" = 3 ]; then
+            [ -f /data/userdata/adb_disable ] || pidof adbd >/dev/null || adb
+        else
+            pkill adbd 2>/dev/null || true
+        fi
+    fi
+    # Keep the existing advanced web-off modes, with no duplicate rules.
+    for family in iptables ip6tables; do
+        if [ "$CURRENT_MODE" = 3 ] || [ "$CURRENT_MODE" = 4 ]; then
+            xtables-multi "$family" -C SERVICE_INPUT -p tcp --dport 80 -j REJECT 2>/dev/null || \
+                xtables-multi "$family" -I SERVICE_INPUT -p tcp --dport 80 -j REJECT || return 1
+        else
+            while xtables-multi "$family" -C SERVICE_INPUT -p tcp --dport 80 -j REJECT 2>/dev/null; do
+                xtables-multi "$family" -D SERVICE_INPUT -p tcp --dport 80 -j REJECT || return 1
+            done
+        fi
+    done
+}
+case "${1:-get}" in
+    get) exit "$CURRENT_MODE";;
+    set_next)
+        debug_ready || { echo 'Debug access needs explicit provisioning and a unique root password' >&2; exit 1; }
+        CURRENT_MODE=$(((CURRENT_MODE+1)%5))
+        ;;
+    boot) ;;
+    *) exit 2;;
+esac
+if ! apply; then
+    pkill telnetd 2>/dev/null || true
+    pkill adbd 2>/dev/null || true
+    exit 1
 fi
+old=$(cat "$CONF_FILE" 2>/dev/null || true)
+[ "$old" = "$CURRENT_MODE" ] || printf '%s\n' "$CURRENT_MODE" > "$CONF_FILE"

@@ -1,0 +1,24 @@
+{
+  "offline_checks_passed": true,
+  "unit_tests": 32,
+  "shell_files_checked": 13,
+  "shellcheck_available": true,
+  "javascript_files_checked": 6,
+  "inventory": {
+    "files": 1329,
+    "bytes": 32413301,
+    "elfs": 131,
+    "text_files_scanned": 927,
+    "xml_valid": 206,
+    "symlinks": 79,
+    "gzip_checked": 494
+  },
+  "archive_sha256": {
+    "app": "ab805e43a526ee9eef2693f1baade920ad5a4cc55e675fa895681560c1f27345",
+    "system": "bfd2e65ead8c2becb54e9f2530b94141c26446d3526a015a4bfddca3dde8ebd2",
+    "web": "da5eb76ea93faa40805ce192a93b19109b8c080a7089c85ed2621189fa5d8230"
+  },
+  "repeat_build_identical": true,
+  "hardware_tested": false,
+  "flash_ready": false
+}

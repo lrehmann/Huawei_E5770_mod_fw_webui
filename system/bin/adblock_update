@@ -1,14 +1,45 @@
 #!/system/bin/busybox sh
-set -e
-
-CTEMPFILE="/var/adblock_list"
-CFILE="/system/etc/dnsmasq-adblock-list.conf"
-
-curl --compressed https://schakal.ru/hosts/alive_hosts_mail_fb.txt \
-| awk '{sub("\r$", ""); sub("^www\\.", "", $2); if ($0 && $0 !~ /^#/ && $2 && $2 !~ /^$/ && $2 != "localhost") print "server=/" $2 "/";}' \
-| sort -u > "$CTEMPFILE"
-
+# Keep the working list on every download, validation, or filesystem failure.
+set -eu
+umask 077
+WORK=
+MOUNTED=0
+LOCK=/var/run/cozy-adblock.lock
+CFILE=/system/etc/dnsmasq-adblock-list.conf
+cleanup() {
+    [ "$MOUNTED" = 0 ] || mount -o remount,ro /system
+    [ -z "$WORK" ] || rm -rf "$WORK"
+    rmdir "$LOCK" 2>/dev/null || true
+}
+mkdir "$LOCK" 2>/dev/null || { echo 'An ad-block update is already running' >&2; exit 1; }
+trap cleanup EXIT
+trap 'exit 1' HUP INT TERM
+WORK=$(mktemp -d /var/run/cozy-adblock.XXXXXX)
+# Also bound responses without Content-Length (ulimit uses shell file blocks).
+(ulimit -f 16384; curl --fail --silent --show-error --location --compressed \
+    --proto '=https' --proto-redir '=https' --tlsv1.2 \
+    --connect-timeout 10 --max-time 90 --retry 2 --max-filesize 8388608 \
+    --output "$WORK/hosts" https://schakal.ru/hosts/alive_hosts_mail_fb.txt)
+[ "$(wc -c < "$WORK/hosts")" -le 8388608 ]
+awk '
+    /^[[:space:]]*#/ { next }
+    $1=="0.0.0.0" || $1=="127.0.0.1" {
+        domain=tolower($2); sub(/\r$/, "", domain); sub(/^www\./, "", domain)
+        if (domain=="localhost" || length(domain)>253 || domain !~ /^[a-z0-9][a-z0-9.-]*[a-z0-9]$/ ||
+            domain !~ /\./ || domain ~ /\.\./ || domain ~ /(^|\.)-/ || domain ~ /-(\.|$)/) next
+        n=split(domain,labels,"."); valid=1
+        for (i=1;i<=n;i++) if (length(labels[i])>63) valid=0
+        if (valid) print "server=/" domain "/"
+    }
+' "$WORK/hosts" | sort -u > "$WORK/list"
+count=$(wc -l < "$WORK/list")
+[ "$count" -ge 100 ] && [ "$count" -le 100000 ] || { echo 'Rejected empty or implausible ad-block list' >&2; exit 1; }
+cmp -s "$WORK/list" "$CFILE" && { echo 'Ad-block list is unchanged'; exit 0; }
 mount -o remount,rw /system
-rm "$CFILE"
-mv "$CTEMPFILE" "$CFILE"
-mount -o remount,ro /system
+MOUNTED=1
+STAGED=$(mktemp /system/etc/.adblock.XXXXXX)
+if ! cat "$WORK/list" > "$STAGED" || ! chmod 644 "$STAGED" || ! mv -f "$STAGED" "$CFILE"; then
+    rm -f "$STAGED"
+    exit 1
+fi
+echo "Installed $count ad-block entries; resolver reload is left to the operator"

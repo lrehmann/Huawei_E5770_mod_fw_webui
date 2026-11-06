@@ -27,4 +27,11 @@ then
     /app/bin/oled_hijack/remote_access.sh boot
 fi
 
+# The native network daemon recreates firewall chains on reconnect.
+if [[ "$1" == "-t" ]] && [[ "$2" == "filter" ]]; then
+    case "$3" in
+        -F|-N) /system/bin/cozy-admin firewall >/dev/null 2>&1 ;;
+    esac
+fi
+
 exit "$RETCODE"

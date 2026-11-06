@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <config>
     <!-- global模块参数 -->
     <!--  拨号成功自动打开指定主页，配置为空则不打开 --> 
@@ -177,6 +177,7 @@
 			<vsim>vsim</vsim>
 			<system>
 	            <deviceinformation>deviceinformation</deviceinformation>
+                <cozy>cozy</cozy>
 	            <!--<configuration>configuration</configuration>-->
 	            <modifypassword>modifypassword</modifypassword>
 	            <diagnosis>diagnosis</diagnosis>

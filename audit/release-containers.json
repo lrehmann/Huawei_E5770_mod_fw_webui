@@ -1,0 +1,277 @@
+[
+  {
+    "file": "UPDATE_WEBUI_17.100.19.01.00_MRE5_mod2.3.BIN",
+    "partitions": [
+      {
+        "name": "oeminfo",
+        "code": "000a0000",
+        "offset": 92,
+        "bytes": 128,
+        "sha256": "0cca9f3050a23d3a61b1ea01d1ee407d3ae503b6596d88d8d22a1d8a7c295fe4",
+        "header_crc_ok": true,
+        "block_crc_ok": true,
+        "version": "input"
+      },
+      {
+        "name": "cdrom",
+        "code": "000b0000",
+        "offset": 320,
+        "bytes": 5517278,
+        "sha256": "bc75382769c6a38b5799ad3e9fb9fd2b6d667520a699fa8314fb3a4cbab10f40",
+        "header_crc_ok": true,
+        "block_crc_ok": true,
+        "version": "input"
+      },
+      {
+        "name": "web",
+        "code": "005b0000",
+        "offset": 5520392,
+        "bytes": 9792512,
+        "sha256": "2eb8b2a4d52aff17c0bb1896d3d44c6ebbae779e8e767f7bfae7c53bf6e724e2",
+        "header_crc_ok": true,
+        "block_crc_ok": true,
+        "version": "input"
+      }
+    ]
+  },
+  {
+    "file": "E5770s_Update_21.329.01.00.00_mod2.3.2.BIN",
+    "partitions": [
+      {
+        "name": "fastboot",
+        "code": "00110000",
+        "offset": 92,
+        "bytes": 261670,
+        "sha256": "5272a2f490a04964fa48364a8ce9505a054ab72d7330d81f3c3748ee62866ac6",
+        "header_crc_ok": true,
+        "block_crc_ok": true,
+        "version": ":BV7R11EC0:21.329.01.00.00"
+      },
+      {
+        "name": "m3boot",
+        "code": "00200000",
+        "offset": 261988,
+        "bytes": 7120,
+        "sha256": "50c7f9117da05688880a0739ed1f5ee06d2a04e49bdbb4fdc143c8d03b7ef976",
+        "header_crc_ok": true,
+        "block_crc_ok": true,
+        "version": ":BV7R11EC0:21.329.01.00.00"
+      },
+      {
+        "name": "ptable",
+        "code": "00010000",
+        "offset": 269212,
+        "bytes": 2048,
+        "sha256": "4003fdff8593ec2fca4f75d0c22622c0cf11b7b2d65f03455ef8cfb25451182d",
+        "header_crc_ok": true,
+        "block_crc_ok": true,
+        "version": ":BV7R11EC0:21.329.01.00.00"
+      },
+      {
+        "name": "kernel",
+        "code": "00090000",
+        "offset": 271360,
+        "bytes": 5607552,
+        "sha256": "4237d3f62b1d2e18386a21bae282218045240a27c1ffe5de00b410a251a7b80c",
+        "header_crc_ok": true,
+        "block_crc_ok": true,
+        "version": ":BV7R11EC0:21.329.01.00.00"
+      },
+      {
+        "name": "vxworks",
+        "code": "00220000",
+        "offset": 5881752,
+        "bytes": 8667488,
+        "sha256": "39a987f1a6079229f8517b3f420f0a05a5cb8fbad9206e3b7341b6fad4f87fb9",
+        "header_crc_ok": true,
+        "block_crc_ok": true,
+        "version": ":BV7R11EC0:21.329.01.00.00"
+      },
+      {
+        "name": "m3image",
+        "code": "00230000",
+        "offset": 14553572,
+        "bytes": 45728,
+        "sha256": "6b360e7388d02ece3ecf798d9687047fcf9cc65f878142e3251bf4c62630e8bb",
+        "header_crc_ok": true,
+        "block_crc_ok": true,
+        "version": ":BV7R11EC0:21.329.01.00.00"
+      },
+      {
+        "name": "dsp",
+        "code": "00240000",
+        "offset": 14599424,
+        "bytes": 2380084,
+        "sha256": "0e4fd53204d7c4b6bd2906ac39bcfd0a1a9758e51bf507ee491636a3947127e0",
+        "header_crc_ok": true,
+        "block_crc_ok": true,
+        "version": ":BV7R11EC0:21.329.01.00.00"
+      },
+      {
+        "name": "nvdload",
+        "code": "00250000",
+        "offset": 16980772,
+        "bytes": 1655034,
+        "sha256": "84919cbbcc4c35c9f02da69898baa27ab985a3c419fbc634f2e9a69d9b109e40",
+        "header_crc_ok": true,
+        "block_crc_ok": true,
+        "version": ":BV7R11EC0:21.329.01.00.00"
+      },
+      {
+        "name": "system",
+        "code": "00590000",
+        "offset": 18636716,
+        "bytes": 19768320,
+        "sha256": "8acaac5cc0ab9e788421fe686a82d4c6268ad05c0589e8eb424983ce2a5226e2",
+        "header_crc_ok": true,
+        "block_crc_ok": true,
+        "version": ":BV7R11EC0:21.329.01.00.00"
+      },
+      {
+        "name": "app",
+        "code": "005a0000",
+        "offset": 38414788,
+        "bytes": 3027968,
+        "sha256": "e640637c077f891010f2271e5ddacd45bac9e378de6442a08237fd2902be257d",
+        "header_crc_ok": true,
+        "block_crc_ok": true,
+        "version": ":BV7R11EC0:21.329.01.00.00"
+      }
+    ]
+  },
+  {
+    "file": "E5770s_UPDATE_21.327.01.00.1133_WEBUI_17.100.17.01.1133_MRE5.ZIP",
+    "partitions": [
+      {
+        "name": "fastboot",
+        "code": "00110000",
+        "offset": 92,
+        "bytes": 100250,
+        "sha256": "2fed2a04626b97457de66e0009b820c0e32ab5d1fb8c5c6d6cdeff822e2a8050",
+        "header_crc_ok": true,
+        "block_crc_ok": true,
+        "version": ":BV7R11EC0:21.327.01.00.1133"
+      },
+      {
+        "name": "m3boot",
+        "code": "00200000",
+        "offset": 100492,
+        "bytes": 3106,
+        "sha256": "a39232fd8448abfbd80b11b3f35d1e7a152b3c334dd12df932dac1b627509f29",
+        "header_crc_ok": true,
+        "block_crc_ok": true,
+        "version": ":BV7R11EC0:21.327.01.00.1133"
+      },
+      {
+        "name": "ptable",
+        "code": "00010000",
+        "offset": 103700,
+        "bytes": 403,
+        "sha256": "46383b2bf8d14f0af83e935bad2726bd25d0efe6be315206880780527132a39f",
+        "header_crc_ok": true,
+        "block_crc_ok": true,
+        "version": ":BV7R11EC0:21.327.01.00.1133"
+      },
+      {
+        "name": "kernel",
+        "code": "00090000",
+        "offset": 104204,
+        "bytes": 5447253,
+        "sha256": "898a4e6370914546cd71fe20b6f08e24a2b557e9e7ecb8a68fb8b34bf202cefa",
+        "header_crc_ok": true,
+        "block_crc_ok": true,
+        "version": ":BV7R11EC0:21.327.01.00.1133"
+      },
+      {
+        "name": "vxworks",
+        "code": "00220000",
+        "offset": 5554216,
+        "bytes": 8651682,
+        "sha256": "1c03ee77a6f34701eb2691cc9f24fa6af08120d9012171a430beeb0fbb3ad2c0",
+        "header_crc_ok": true,
+        "block_crc_ok": true,
+        "version": ":BV7R11EC0:21.327.01.00.1133"
+      },
+      {
+        "name": "m3image",
+        "code": "00230000",
+        "offset": 14210224,
+        "bytes": 28334,
+        "sha256": "474ca56f3f9718bd07dd4c1358dc4bcfbb1aa22164e520f3e1102647466680a9",
+        "header_crc_ok": true,
+        "block_crc_ok": true,
+        "version": ":BV7R11EC0:21.327.01.00.1133"
+      },
+      {
+        "name": "dsp",
+        "code": "00240000",
+        "offset": 14238672,
+        "bytes": 1117625,
+        "sha256": "7663439cf255272cb70a31a3ab9a0c9bb85a3e7a6148ee7b32eff3d256ff473d",
+        "header_crc_ok": true,
+        "block_crc_ok": true,
+        "version": ":BV7R11EC0:21.327.01.00.1133"
+      },
+      {
+        "name": "nvdload",
+        "code": "00250000",
+        "offset": 15356944,
+        "bytes": 135296,
+        "sha256": "4bdf2d2c0a4b95eee4a352bfe2d9aad254c483e8df20662daa885c57bc4993eb",
+        "header_crc_ok": true,
+        "block_crc_ok": true,
+        "version": ":BV7R11EC0:21.327.01.00.1133"
+      },
+      {
+        "name": "system",
+        "code": "00590000",
+        "offset": 15492408,
+        "bytes": 6447290,
+        "sha256": "d8727ff753ea0d5188fbd5d0ea4dd122554ba3df349594babcdabc89e3500dc0",
+        "header_crc_ok": true,
+        "block_crc_ok": true,
+        "version": ":BV7R11EC0:21.327.01.00.1133"
+      },
+      {
+        "name": "app",
+        "code": "005a0000",
+        "offset": 21942948,
+        "bytes": 1347294,
+        "sha256": "b79c35969babcd4cfbd6c016f433fb1f508454c9ea4b997a57697d8e7aa6c6fb",
+        "header_crc_ok": true,
+        "block_crc_ok": true,
+        "version": ":BV7R11EC0:21.327.01.00.1133"
+      },
+      {
+        "name": "oeminfo",
+        "code": "000a0000",
+        "offset": 23291000,
+        "bytes": 38,
+        "sha256": "f7cbe7f200520795a4bec74624d16e4cef3b51f9dfdf42cb44e7f85c14eb5b18",
+        "header_crc_ok": true,
+        "block_crc_ok": true,
+        "version": ":BV7R11EC0:21.327.01.00.1133"
+      },
+      {
+        "name": "cdrom",
+        "code": "000b0000",
+        "offset": 23291140,
+        "bytes": 3835494,
+        "sha256": "249e0d5166479281c20faff7744778e8de9405cf11f72ec0625879d4e20acc09",
+        "header_crc_ok": true,
+        "block_crc_ok": true,
+        "version": ":BV7R11EC0:21.327.01.00.1133"
+      },
+      {
+        "name": "web",
+        "code": "005b0000",
+        "offset": 27128608,
+        "bytes": 4223765,
+        "sha256": "9fcb41137ec466b3268a55c992c5cc6e5b00a4972b711a6731a4d6d70df1158c",
+        "header_crc_ok": true,
+        "block_crc_ok": true,
+        "version": ":BV7R11EC0:21.327.01.00.1133"
+      }
+    ]
+  }
+]

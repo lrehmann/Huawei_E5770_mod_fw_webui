@@ -1,0 +1,18 @@
+# CANDIDATE ONLY. Not merged, compiled, flashed, or hardware-tested.
+# Requires exact vendor baseline and driver/USB/diagnostic regression testing.
+# Read-only kernel text is incompatible with the legacy NV/ECM memory patches.
+CONFIG_CC_STACKPROTECTOR=y
+CONFIG_SECCOMP=y
+CONFIG_DEBUG_RODATA=y
+CONFIG_SECURITY_DMESG_RESTRICT=y
+# CONFIG_MODULE_FORCE_UNLOAD is not set
+# CONFIG_USB_DEBUG is not set
+# CONFIG_USB_DWC3_DEBUG is not set
+# CONFIG_USB_XHCI_HCD_DEBUGGING is not set
+# CONFIG_USB_GADGET_DEBUG is not set
+# CONFIG_USB_GADGET_DEBUG_FILES is not set
+# CONFIG_USB_GADGET_DEBUG_FS is not set
+# CONFIG_GNET_DEBUG is not set
+# CONFIG_STMMAC_DEBUG_FS is not set
+# CONFIG_DEBUG_FS is not set
+# CONFIG_DEBUG_INFO is not set

@@ -1,0 +1,38 @@
+#!/system/bin/busybox sh
+# Boot-time RAM overlays. Persistent settings never modify firmware partitions.
+set -eu
+umask 077
+PROFILE=/data/userdata/cozy/profile
+BASE=/system/etc/cozy
+RUN=/var/run/cozy-screens
+ROOT=/app/webroot/WebApp/common/config
+[ -f "$PROFILE" ] || PROFILE="$BASE/default.profile"
+if ! /system/bin/cozy-validate "$PROFILE"; then
+    echo 'Cozy: invalid saved profile; using defaults' >&2
+    PROFILE="$BASE/default.profile"
+fi
+/system/bin/cozy-validate "$PROFILE" || exit 1
+mkdir -p "$RUN"
+value() { awk -v key="$1" 'index($0,key "=")==1 { print substr($0,length(key)+2); exit }' "$PROFILE"; }
+theme=$(value theme)
+dim=$(value dim_seconds)
+sleep=$(value sleep_seconds)
+for size in 64 128; do
+    value "boot$size" > "$RUN/boot$size.hex"
+    folder=oled
+    [ "$size" = 128 ] || folder=oled_128x64
+    source="$ROOT/$folder"
+    [ -f "$source/animation.xml" ] || continue
+    # Staging must succeed before mounting either member of this pair.
+    awk -v boot="$RUN/boot$size.hex" -v bye="$BASE/themes/$theme/bye$size.hex" \
+        -f "$BASE/animation.awk" "$source/animation.xml" > "$RUN/$folder-animation.xml"
+    awk -v dim="$dim" -v sleep="$sleep" '
+        /<oled_dim>/ { section=1 }
+        /<oled_sleep>/ { section=2 }
+        section && /<time>/ { sub(/<time>[0-9]+<\/time>/,"<time>" (section==1 ? dim : sleep) "</time>") }
+        { print }
+        /<\/oled_dim>/ || /<\/oled_sleep>/ { section=0 }
+    ' "$source/config.xml" > "$RUN/$folder-config.xml"
+    mount --bind "$RUN/$folder-animation.xml" "$source/animation.xml"
+    mount --bind "$RUN/$folder-config.xml" "$source/config.xml"
+done

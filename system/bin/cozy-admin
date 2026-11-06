@@ -1,0 +1,86 @@
+#!/system/bin/busybox sh
+# Optional LAN-only companion to the native authenticated web interface.
+set -eu
+umask 077
+RUN=/var/run/cozy-admin
+ROOT=/system/www/cozy
+DISABLE=/data/userdata/cozy_admin_disable
+ipt() { xtables-multi iptables "$@"; }
+private_ip() {
+    awk -F. 'NF==4 && $1~/^[0-9]+$/ && $2~/^[0-9]+$/ && $3~/^[0-9]+$/ && $4~/^[0-9]+$/ &&
+      $1<256 && $2<256 && $3<256 && $4>0 && $4<255 &&
+      ($1==10 || ($1==192 && $2==168) || ($1==172 && $2>=16 && $2<=31)) { ok=1 }
+      END {exit !ok}'
+}
+firewall() {
+    [ -f "$RUN/bind-address" ] || return 1
+    addr=$(cat "$RUN/bind-address")
+    printf '%s\n' "$addr" | private_ip || return 1
+    # Keep a deny guard in place throughout jump replacement.
+    ipt -I INPUT 1 -p tcp --dport 8080 -j REJECT || return 1
+    ipt -N COZY_ADMIN 2>/dev/null || true
+    ipt -C COZY_ADMIN -i lo -j ACCEPT 2>/dev/null || ipt -I COZY_ADMIN 1 -i lo -j ACCEPT || return 1
+    ipt -C COZY_ADMIN -i br0 -d "$addr" -j ACCEPT 2>/dev/null || ipt -I COZY_ADMIN 1 -i br0 -d "$addr" -j ACCEPT || return 1
+    ipt -C COZY_ADMIN -j DROP 2>/dev/null || ipt -A COZY_ADMIN -j DROP || return 1
+    # Keep this ahead of native broad ACCEPT rules after every reconnect.
+    while ipt -C INPUT -p tcp --dport 8080 -j COZY_ADMIN 2>/dev/null; do
+        ipt -D INPUT -p tcp --dport 8080 -j COZY_ADMIN || return 1
+    done
+    ipt -I INPUT 1 -p tcp --dport 8080 -j COZY_ADMIN || return 1
+    while ipt -C INPUT -p tcp --dport 8080 -j REJECT 2>/dev/null; do
+        ipt -D INPUT -p tcp --dport 8080 -j REJECT || return 1
+    done
+}
+running() {
+    [ -f "$RUN/pid" ] || return 1
+    pid=$(cat "$RUN/pid")
+    case "$pid" in ''|*[!0-9]*) return 1;; esac
+    [ -r "/proc/$pid/cmdline" ] || return 1
+    tr '\000' ' ' < "/proc/$pid/cmdline" | grep -Fq "httpd -f -p " || return 1
+    tr '\000' ' ' < "/proc/$pid/cmdline" | grep -Fq "$ROOT" || return 1
+}
+case "${1:-status}" in
+    start)
+        [ ! -f "$DISABLE" ] || exit 0
+        mkdir -p "$RUN"
+        mkdir "$RUN/start-lock" 2>/dev/null || exit 1
+        trap 'rmdir "$RUN/start-lock" 2>/dev/null || true' EXIT
+        trap 'exit 1' HUP INT TERM
+        running && exit 0
+        # Native boot may not have brought br0 up yet. This wait is bounded.
+        count=0
+        addr=
+        while [ "$count" -lt 30 ]; do
+            addr=$(ip -4 addr show dev br0 2>/dev/null | awk '/inet / {split($2,a,"/"); print a[1]; exit}')
+            if printf '%s\n' "$addr" | private_ip; then break; fi
+            addr=
+            count=$((count+1))
+            sleep 1
+        done
+        [ -n "$addr" ] || exit 1
+        printf '%s\n' "$addr" > "$RUN/bind-address"
+        # Refuse to open a listener unless the LAN firewall was installed.
+        firewall || exit 1
+        if [ ! -s "$RUN/csrf" ]; then
+            od -An -N32 -tx1 /dev/urandom | tr -d ' \n' > "$RUN/csrf"
+        fi
+        [ "$(wc -c < "$RUN/csrf" | tr -d ' ')" = 64 ] || exit 1
+        printf 'I:index.html\n' > "$RUN/httpd.conf"
+        busybox httpd -f -p "$addr:8080" -h "$ROOT" -c "$RUN/httpd.conf" &
+        printf '%s\n' "$!" > "$RUN/pid"
+        ;;
+    firewall)
+        if ! firewall; then
+            if running; then kill "$pid"; rm -f "$RUN/pid"; fi
+            exit 1
+        fi
+        ;;
+    stop|disable)
+        if [ "$1" = disable ]; then touch "$DISABLE"; rm -f /data/userdata/cozy_admin_enable; fi
+        if running; then kill "$pid"; fi
+        rm -f "$RUN/pid"
+        ;;
+    enable) touch /data/userdata/cozy_admin_enable; rm -f "$DISABLE"; exec "$0" start;;
+    status) if running; then echo 'Cozy settings is running on the router LAN address, port 8080'; else echo 'Cozy settings is stopped'; fi;;
+    *) echo 'Usage: cozy-admin start|stop|enable|disable|status|firewall' >&2; exit 2;;
+esac

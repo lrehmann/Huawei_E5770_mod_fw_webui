@@ -1,0 +1,11 @@
+{
+  "upstream_commit": "a4b7711f7564bfd408ce925564b128e05c20313d",
+  "binaries": {
+    "app/bin/oled.orig": "227bca91ad415f2cf24d75686290a121f7b3aba07e1380f59401447472f3ce5d",
+    "app/bin/npdaemon.orig": "645ab556a98db9a6d07f1128eb39140f6f9b4bca1e89c53b4803945f4c33bfc9",
+    "app/bin/router.orig": "70318e715ad03662d06d16a9aeb2de13a9367914d09cf827ff2a97a297495c38",
+    "app/bin/device.orig": "e1e48a7c61397fcc1b4c656f99d3f62b5b577e48230c34ba662faff98fb473b2",
+    "app/bin/webserver": "b8a6882d070c4c079aa25c711e132a80fdc46c774104b1d6d96ae91d98851155",
+    "app/bin/oled_hijack/oled_hijack.so": "85a4b24a6c64dda5fdc4853fa03fdabaca7664a66b2a0bcb0aa242f9dd167394"
+  }
+}

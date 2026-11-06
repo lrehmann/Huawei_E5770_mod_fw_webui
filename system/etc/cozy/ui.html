@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>Cozy · Your pocket companion</title>
+  <link rel="stylesheet" href="/style.css">
+  <script defer src="/glyphs.js"></script>
+  <script defer src="/pixels.js"></script>
+  <script defer src="/app.js"></script>
+</head>
+<body>
+  <header class="topbar"><a class="wordmark" href="/cgi-bin/ui.cgi"><span class="brand-flower" aria-hidden="true">✳</span> cozy<span class="wordmark-note">a little more you.</span></a><a id="router-link" class="router-link" href="/">Router settings <span aria-hidden="true">↗</span></a></header>
+  <main>
+    <div class="intro"><p class="eyebrow">YOUR POCKET COMPANION</p><h1>Small device.<br>A little personality.</h1><p>Make your hotspot feel right at home.</p></div>
+    <div id="connection" class="connection" role="status">Connecting to your hotspot…</div>
+    <div class="workspace">
+      <aside class="preview-panel">
+        <div class="preview-caption"><span class="status-dot"></span><span id="device-label">COZY HOTSPOT</span><span id="battery">—</span></div>
+        <div class="device"><span class="device-speaker"></span><div class="screen-frame"><canvas id="preview" width="128" height="64" role="img" aria-label="Live preview of your startup screen"></canvas></div><span class="device-brand">cozy</span><div class="device-controls"><span></span><span></span></div></div>
+        <div class="preview-tabs" role="group" aria-label="Preview screen"><button type="button" data-screen="hello" aria-pressed="true">Hello</button><button type="button" data-screen="bye" aria-pressed="false">Goodnight</button></div>
+        <p class="preview-note">Tiny pixels. Big personality.<br>Preview uses your device’s screen artwork.</p>
+        <div class="little-note"><span aria-hidden="true">♡</span><p>Made for the little things.<br>And wherever you take them.</p></div>
+      </aside>
+      <form id="settings" class="settings-panel">
+        <div class="section-heading"><span class="step">01</span><div><h2>Pick a pocket pal</h2><p>A friendly hello every time it wakes up.</p></div></div>
+        <div class="themes" role="group" aria-label="Screen theme">
+          <button type="button" class="theme selected" data-theme="cat" aria-pressed="true"><span class="pal cat-pal" aria-hidden="true">/\_/\<br>( ·ᴗ· )</span><strong>Little cat</strong><span>Curious company</span><i aria-hidden="true">✓</i></button>
+          <button type="button" class="theme" data-theme="cloud" aria-pressed="false"><span class="pal cloud-pal" aria-hidden="true">☁</span><strong>Daydream</strong><span>A softer start</span><i aria-hidden="true">✓</i></button>
+          <button type="button" class="theme" data-theme="sprout" aria-pressed="false"><span class="pal sprout-pal" aria-hidden="true">⚘</span><strong>Small sprout</strong><span>Room to grow</span><i aria-hidden="true">✓</i></button>
+        </div>
+        <div class="section-heading second"><span class="step">02</span><div><h2>Say it your way</h2><p>A name and a little welcome.</p></div></div>
+        <div class="fields two"><label>Companion name<input id="label" name="label" maxlength="16" value="COZY HOTSPOT" required autocomplete="off"><small>For this page. Change your Wi-Fi name in Router settings.</small></label><label>Welcome message<input id="message" name="message" maxlength="18" value="HELLO FRIEND" required autocomplete="off"><small><span id="message-count">12</span> / 18 characters · letters, numbers, ! ? . ' _ -</small></label></div>
+        <div class="section-heading second"><span class="step">03</span><div><h2>Settle into a rhythm</h2><p>A comfortable screen, with a lighter touch.</p></div></div>
+        <div class="fields three"><label>Dim screen after<select id="dim_seconds" name="dim_seconds"><option value="5">5 seconds</option><option value="10" selected>10 seconds</option><option value="15">15 seconds</option><option value="30">30 seconds</option><option value="60">1 minute</option></select></label><label>Screen off after<select id="sleep_seconds" name="sleep_seconds"><option value="10">10 seconds</option><option value="15" selected>15 seconds</option><option value="30">30 seconds</option><option value="60">1 minute</option><option value="120">2 minutes</option><option value="300">5 minutes</option></select></label><label>Status refresh<select id="poll_seconds" name="poll_seconds"><option value="5">5 seconds</option><option value="10">10 seconds</option><option value="30" selected>30 seconds</option><option value="60">1 minute</option></select></label></div>
+        <p class="field-note">Status refresh pauses while this page is hidden.</p>
+        <div class="save-row"><p id="save-note" role="status">Screen changes take effect the next time your hotspot starts.</p><button id="save" class="primary" type="submit" disabled>Save my settings <span aria-hidden="true">↗</span></button></div>
+        <div class="profile-tools"><button type="button" id="export">Export my look</button><span>·</span><button type="button" id="import">Import a look</button><input type="file" id="profile-file" accept="application/json,.json" hidden></div>
+      </form>
+    </div>
+    <footer><span>COZY FOR HUAWEI E5770</span><span>Designed to go along.</span></footer>
+  </main>
+</body>
+</html>

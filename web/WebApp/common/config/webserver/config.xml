@@ -13,7 +13,7 @@
         <main_page>/html/index.html</main_page>
         <tokenenable>1</tokenenable>
         <!--在线升级无需登录功能开关-->
-        <whitelist_enable>1</whitelist_enable>
+        <whitelist_enable>0</whitelist_enable>
         <!--登陆用户名类型开关: 0 默认用户名admin登陆  1 定制用户名登陆-->
         <loginusername_enable>0</loginusername_enable>
         <salt>3724296ab748c6ab801bc37fa0060f2889d225b0d0427dbdae46f7c73f5fd78c</salt>

@@ -1,0 +1,43 @@
+diff --git a/oled_hijack_so_128x64.c b/oled_hijack_so_128x64.c
+index 77f83ed..e21baae 100644
+--- a/oled_hijack_so_128x64.c
++++ b/oled_hijack_so_128x64.c
+@@ -287,7 +287,7 @@ static int call_script(char const *script, char const *additional_argument) {
+  * Called in notify_handler_async.
+  */
+ static void update_menu_state(int menu_page) {
+-    if (menu_page >= 0 && menu_page <= scripts_count) {
++    if (menu_page >= 0 && menu_page < scripts_count) {
+         scripts[menu_page].state = call_script(scripts[menu_page].path, "get");
+     }
+ }
+@@ -298,6 +298,8 @@ static void update_menu_state(int menu_page) {
+  * Called when the POWER button is pressed on hijacked page.
+  */
+ static void handle_menu_state_change(int menu_page) {
++    if (menu_page < 0 || menu_page >= scripts_count)
++        return;
+     call_script(scripts[menu_page].path, "set_next");
+ }
+ 
+@@ -313,6 +315,11 @@ static void create_menu_item(char *buf, size_t bufsize, const char *mapping[],
+         char_list_size++;
+     }
+ 
++    if (current_item < 0 || current_item >= char_list_size) {
++        snprintf(buf, bufsize, "     ERROR\n\n\n");
++        return;
++    }
++
+     fprintf(stderr, "Trying to create menu\n");
+ 
+     if (current_item == 0) {
+@@ -331,7 +338,7 @@ static void create_menu_item(char *buf, size_t bufsize, const char *mapping[],
+              (mapping[current_item])
+         );
+     }
+-    else if (current_item <= char_list_size) {
++    else if (current_item < char_list_size) {
+         snprintf(buf, bufsize,
+             "     %s\n   > %s\n     %s\n",
+             ((current_item > 0) ? mapping[current_item - 1] : nothing),

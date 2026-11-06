@@ -124,21 +124,12 @@
     <not_need_login_post_restful_list>
         <uri>/user/login</uri>
         <uri>/host/info</uri>
-        <uri>/sdcard/sdfile</uri>
-        <uri>/sdcard/fileupload</uri>
-        <uri>/sdcard/Check_file_exist</uri>
-        <uri>/sdcard/createdir</uri>
-        <uri>/sdcard/deletefile</uri>
         <uri>/language/current-language</uri>
         <uri>/user/input_event</uri>
         <uri>/user/screen_state</uri>
-        <uri>/mlog/mobile-logger</uri>
-        <uri>/online-update/upgrade-messagebox</uri>
         <uri>/device/basic_information</uri>
-        <uri>/device/restore-default</uri>
         <uri>/prsite/getrandurl</uri>
         <uri>/prsite/clear</uri>
-        <uri>/online-update/autoupdate-config</uri>
         <uri>/user/challenge_login</uri>
         <uri>/user/authentication_login</uri>
         <uri>/app/privacynoticeinfo</uri>

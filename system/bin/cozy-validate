@@ -1,0 +1,7 @@
+#!/system/bin/busybox sh
+# Some awk implementations discard NULs. Validate bytes before parsing lines.
+set -eu
+[ "$#" = 1 ] && [ -f "$1" ] || exit 2
+[ "$(wc -c < "$1")" -le 8192 ] || exit 1
+LC_ALL=C tr -cd '\012\040-\176' < "$1" | cmp -s "$1" - || exit 1
+LC_ALL=C awk -f /system/etc/cozy/profile.awk "$1"
