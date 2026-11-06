@@ -12,13 +12,21 @@ pinned upstream base. The `system`, `app` and `web` filesystems contain Cozy.
 it has not been flashed or hardware-qualified.** CRC/SHA checks do not create an
 OEM signature, prove stock-firmware acceptance, or establish a recovery path.
 
+**Current connected-device scope: complete image, factory update paths only.**
+On the confirmed stock E5770s-320, the live API reports
+`localupdate_enabled=0`. The factory upload page exists, but submitting its form
+starts the update workflow and is not a documented validation-only operation.
+Cozy has no validated factory-install/rollback path for this unit. No image has
+been uploaded. See the [current checkpoint](PREFLASH.md). The development
+procedure below is not an approved workaround for this stock installation.
+
 ## 1. Confirm the installation path
 
 | Current state | Path |
 | --- | --- |
 | Compatible modified E5770 firmware | Follow the development-upgrade procedure below after private backups and a usable recovery path. This is the entry condition documented by upstream; Cozy itself remains hardware-untested. |
 | Compatible E5770 technological/service firmware | The same upstream entry condition applies. Confirm the exact variant, loader, partition map and recovery before proceeding. |
-| Stock `21.318.01.00.00` | Direct installation is **not verified**. Establish a model-specific, authorized stock-to-service/mod transition first. Entering download mode alone does not satisfy this prerequisite. |
+| Stock `21.318.01.00.00` | **Not cleared.** Local updates are disabled in the connected unit's factory configuration; factory authentication of Cozy and rollback are unqualified. Keep the stock firmware installed until those requirements can be met through a supported factory path. |
 | Supplied stock `21.327.01.00.1133` file | This is a different raw update image, not a backup of the installed `21.318` firmware or proof of an accepted transition. Do not select it as an automatic rollback. |
 | Another model or an uncertain E5770 variant | Do not flash these images. Confirm the label/API identity and matching recovery resources first. |
 

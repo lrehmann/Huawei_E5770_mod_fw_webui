@@ -1,5 +1,5 @@
 {
-  "review_date_local": "2026-11-05 America/Los_Angeles",
+  "review_date_local": "2026-11-06 America/Los_Angeles",
   "firmware_release": "0.1.0-alpha.2",
   "flash_clearance": "NOT CLEARED",
   "live_device": {
@@ -8,9 +8,12 @@
     "firmware": "21.318.01.00.00",
     "webui": "17.100.14.01.00",
     "owner_purchase_record_model": "E5770s-320 white",
-    "physical_label_independently_read": false,
+    "physical_label_independently_read": true,
+    "physical_label_model": "E5770s-320",
+    "physical_label_image_kept_private": true,
     "battery_at_initial_check_percent": 18,
     "charging": true,
+    "battery_latest_check_percent": 49,
     "health_capacity_tested": false
   },
   "usb": {
@@ -30,6 +33,19 @@
       "kind": "Virtual installer mass storage only"
     },
     "normal_mode_serial_or_adb_interface_exposed": false,
+    "stock_debug": {
+      "vid": "12d1",
+      "pid": "1566",
+      "interfaces": 9,
+      "serial_interfaces": 6,
+      "pcui_class_subclass_protocol": "ff/02/12",
+      "serial_firmware_matches_stock": true,
+      "datalock_query_value": 1,
+      "nv_53521_two_query_results": "ERROR; no backup obtained",
+      "nv_50502_two_query_results": "ERROR; no backup obtained",
+      "root_console_obtained": false,
+      "debug_mode_cleared_by_native_reboot": true
+    },
     "pc_download": {
       "owner_observed_screen": "Download/update",
       "entry": "Power off, then labeled Reset + Power",
@@ -101,6 +117,23 @@
     "temporary_inspection_allow_rule_removed": true,
     "existing_wsl_shutdown_or_package_changes": false
   },
+  "factory_installation": {
+    "requested_artifact": "Complete custom firmware image",
+    "method_scope": "Safe, established factory-provided update paths with normal validation",
+    "inner_case_kept_closed": true,
+    "security_work_scope": "Improving the owned device only",
+    "localupdate_enabled_live": false,
+    "factory_update_assets_read_from_installed_device": true,
+    "factory_upload_route": "/api/filemanager/upload",
+    "factory_form_fields": ["csrf_token", "cur_path", "uploadfile"],
+    "validation_only_upload_mode_documented": false,
+    "firmware_upload_attempted": false,
+    "modified_payload_oem_authentication_validated": false,
+    "main_image_inherited_signature_metadata_bytes": 2958,
+    "qualified_factory_install_or_rollback": false,
+    "unlock_code_or_signature_bypass_attempted": false,
+    "factory_reset_performed": false
+  },
   "compatibility_fix": {
     "finding": "Native stock HTTP redirect listener occupies 8080",
     "cozy_companion_port": 18080,
@@ -109,11 +142,11 @@
     "regression_tests": 43
   },
   "remaining": [
-    "Physical model/board and live partition/NAND geometry confirmation",
-    "Trusted privileged read path without first overwriting stock firmware",
+    "Live partition/NAND geometry and board confirmation within the authorized scope",
+    "Factory-supported read path without first overwriting stock firmware",
     "Consistent full-size repeated raw NAND/NV and required OOB/ECC/bad-block captures",
-    "Device-specific BootROM entry and non-erasing recovery boot/read/restore protocol test",
-    "Compatible installed-version rollback and stock-to-mod transition",
+    "Qualified recovery/read/restore protocol; BootROM is untested with the case closed",
+    "Factory-compatible custom package authentication and installed-version rollback",
     "Sustained power/battery and filesystem capacity validation"
   ]
 }

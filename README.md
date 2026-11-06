@@ -9,6 +9,11 @@ device has been flashed or hardware-qualified; full security auditing remains
 open. Read [INSTALL.md](docs/INSTALL.md) before a device write and
 [the audit](docs/AUDIT.md) for the evidence and remaining work.
 
+The connected stock E5770s-320 is restricted to factory update paths. Its native
+configuration disables local updates, and Cozy's factory authentication and
+rollback remain unqualified. **No image has been uploaded to the device.** See
+the [current installation checkpoint](docs/PREFLASH.md).
+
 | White hardware reference | Black hardware reference |
 | --- | --- |
 | ![User-supplied white Huawei hotspot reference photo](docs/images/huawei-hotspot-white.png) | ![User-supplied black Huawei hotspot reference photo](docs/images/huawei-hotspot-black.png) |

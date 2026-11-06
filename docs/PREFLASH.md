@@ -1,10 +1,31 @@
 # Compatibility and backup checkpoint
 
-Checked November 5, 2026, America/Los_Angeles. **The device is not cleared for
-flashing.** No firmware or NV write command was sent, and no recovery loader was
-loaded. Native admin authentication was used for read-only configuration
-snapshots. The owner subsequently used Reset + Power to enter download mode;
-only USB descriptors and host serial-node enumeration were inspected.
+Updated November 6, 2026, America/Los_Angeles. **The device is not cleared for
+flashing.** No firmware upload, NV write command or recovery-loader transfer was
+performed. Native admin authentication, temporary USB composition changes,
+bounded read-only serial queries and a native reboot were used for the checks.
+The temporary debug mode was cleared; the installed stock versions remain intact.
+
+## Current installation scope: factory paths only
+
+The requested deployment is the complete Cozy image through established Huawei
+factory update paths, honoring their validation and signature checks. Keep the
+inner case closed and limit security work to improving this device. No unlock,
+signature bypass, service-firmware transition or recovery-loader test was used.
+
+The live stock API reports **`localupdate_enabled=0`**. Its own local-update HTML
+and JavaScript are present and were retrieved with GET requests. They describe a
+multipart upload to `/api/filemanager/upload`, with `csrf_token`, `cur_path` and
+`uploadfile` fields. The client enters update-status monitoring after submission;
+it does not expose a validation-only upload step. The disabled feature was not
+forced on, and no request was sent to the firmware-upload handler.
+
+Offline inspection detects inherited Huawei update-signature metadata in the
+main image (2,958 bytes). That metadata is retained from the upstream base;
+presence of a signature block and valid CRCs do not prove authentication of the
+modified payload or acceptance by this stock updater. A factory-compatible Cozy
+package/signing route and a validated rollback remain unqualified. The
+development-flasher instructions are not the approved path for this stock unit.
 
 ## Confirmed on the connected unit
 
@@ -14,14 +35,22 @@ only USB descriptors and host serial-node enumeration were inspected.
 | Hardware | `CL2E5770SM` |
 | Installed firmware | `21.318.01.00.00` |
 | Installed WebUI | `17.100.14.01.00` |
-| Purchase-record model supplied by the owner | White `E5770s-320`; physical label not independently read |
+| Physical label | `E5770s-320`, independently read from the owner's private photo; identifiers and Wi-Fi credentials excluded from Git |
 | USB on the Mac | Huawei `12d1:14db`, CDC ECM control and data interfaces; no Huawei serial or ADB interface exposed |
 | USB on the work PC | Huawei `12d1:1f01`, installer mode; Linux descriptors confirm one mass-storage interface and no serial node |
 | Button-entry download mode | Owner observed the download/update screen; Huawei `12d1:1442`, one vendor interface and one mass-storage interface |
 | Download serial transport | WSL exposed `/dev/ttyUSB0`; the port was not opened. Windows interface 0 has no driver (problem code 28) |
+| Temporary stock debug mode | `12d1:1566`, ECM plus six serial interfaces and SD mass storage; source-identified PCUI AT port queried read-only |
 | Management | Native HTTP server on 80; another native HTTP redirect listener on 8080 |
 | Available shell paths | No ADB device; tested SSH, Telnet, alternate Telnet and TCP ADB ports refused connections |
-| Battery during inspection | 18%, charging; capacity/health and sustained power behavior untested |
+| Battery | Initially 18%; latest native API check 49%, charging. Capacity/health and sustained load behavior untested |
+
+The debug PCUI port independently reported stock firmware `21.318.01.00.00` and
+`^DATALOCK:1`. Reads of NV items 53521 and 50502 were each attempted twice and
+returned `ERROR`; identical error responses are **not NV backups**. Passive shell
+port reads and a single A-core newline probe produced no console output. No
+privileged shell, live MTD map or raw flash access was obtained. Those access
+checks have ended under the factory-only scope above.
 
 The previously selected Cozy port 8080 conflicts with an existing stock listener.
 **Alpha.2 moves the companion, its firewall, Host/Referer checks and native menu
@@ -124,6 +153,14 @@ The normal-mode device is unshared; the inbound-deny guard remains enabled and
 the temporary allow rule is absent. This confirms exit from the download-mode
 inspection, not a firmware restore or a boot of Cozy.
 
+During the later stock debug check, stale virtual imports accumulated in WSL.
+Cleanup now closes this hotspot's identified Linux USB/IP imports before
+blocking their TCP transport. Only imports mapped to the selected Huawei device
+were detached; no controller reset, WSL shutdown, host restart or production
+service restart was used. Windows default routes and WSL routes were preserved.
+The native reboot returned `OK` and cleared the debug composition. Subsequent
+authenticated factory checks again reported the original firmware and WebUI.
+
 The pinned RAM uploader was built in an isolated user directory in WSL and
 parsed the loader's 20-partition map in offline mode. Existing WSL services and
 packages were not changed or restarted. No recovery loader was executed on the
@@ -134,20 +171,20 @@ direct PC route avoids needing to qualify Mac VM passthrough first.
 
 The remaining requirements are:
 
-1. Confirm the physical variant/board and obtain the live `/proc/mtd`, mount
+1. The physical model is confirmed. Obtain the live `/proc/mtd`, mount
    table, NAND geometry and USB NV/composition details through a trusted read
-   interface. Do not obtain that interface by first overwriting stock firmware.
+   interface, if one is available within the factory-only scope. Do not obtain
+   that interface by first overwriting stock firmware.
 2. Obtain and independently reread device-specific NV/calibration and immutable
    flash partitions with expected lengths and matching hashes. Capture mutable
    data consistently. YAFFS/NAND restoration may require OOB/ECC and bad-block
    metadata; plain `cat` or `mtdblock` copies alone are insufficient.
-3. Establish compatible installed-version recovery software and a verified
-   BootROM entry method for loss of the ordinary download mode. Button-entry
-   download enumeration is confirmed, but a non-erasing recovery boot and
-   usable read/restore protocol still need qualification, ideally on a spare
-   matching unit.
-4. Verify the stock-to-service/mod transition from `21.318.01.00.00`, sustained
-   power/battery condition, filesystem capacity and a usable management path
-   with Cozy's ECM research patch disabled.
+3. Establish a factory-supported installation and rollback path from
+   `21.318.01.00.00`. Button-entry download enumeration is confirmed; a usable
+   backup/restore protocol and recovery boot are not. BootROM testing has not
+   been performed with the case closed.
+4. Qualify the modified image for the factory updater and validate sustained
+   power, filesystem capacity and a usable management path. Do not enable a
+   hidden feature or bypass stock authentication to satisfy this gate.
 
 No raw NAND dump or hardware recovery success is claimed at this checkpoint.

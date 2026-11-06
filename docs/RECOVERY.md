@@ -10,6 +10,12 @@ The current [preflash checkpoint](PREFLASH.md) records verified private settings
 snapshots, pinned E5770 loader candidates and the remaining raw-backup/recovery
 gates. An offline erase-suppression patch check is not a successful recovery boot.
 
+The current owner selected a closed case and factory-provided update paths only.
+Stock debug-interface checks did not yield a privileged console or readable NV
+records. No full NAND/NV backup or proven recovery boot was obtained. Do not
+infer recovery readiness from the verified settings/installer-CD copies, or use
+the candidate loaders to work around the current installation scope.
+
 ## Observed download-mode entry
 
 The [upstream E5770 release instructions](https://github.com/Huawei-LTE-routers-mods/Huawei_E5770_mod_fw_webui/releases/tag/v2.3.2)
