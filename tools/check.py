@@ -10,6 +10,7 @@ import sys
 import unittest
 from pixels import ROOT
 from audit import scan
+from firmware import verify_bundle
 
 
 def main():
@@ -45,10 +46,20 @@ def main():
         subprocess.run([sys.executable,str(ROOT/'tools/build.py'),'--experimental','--output',str(directory)],check=True)
         builds.append({part:hashlib.file_digest((directory/f'{part}-mod.cpio').open('rb'),'sha256').hexdigest() for part in ['app','system','web']})
     if builds[0]!=builds[1]:raise ValueError('Filesystem archives are not reproducible')
+    complete=verify_bundle(ROOT/'firmware/experimental')
+    # The full-image and CPIO-only entrypoints must package exactly the same FS.
+    from balong import partitions
+    full_manifest=json.loads((ROOT/'firmware/experimental/MANIFEST.json').read_text())
+    for kind in ('firmware','webui'):
+        image=ROOT/'firmware/experimental'/full_manifest['images'][kind]['file']
+        for part in partitions(image.read_bytes()):
+            if part.name in builds[0] and hashlib.sha256(part.data).hexdigest()!=builds[0][part.name]:
+                raise ValueError(f'Full image/CPIO disagreement: {part.name}')
     report={'offline_checks_passed':True,'unit_tests':result.testsRun,'shell_files_checked':len(shells)+len(legacy_shells),
             'shellcheck_available':bool(shutil.which('shellcheck')),
             'javascript_files_checked':len(scripts),'inventory':inventory['counts'],
-            'archive_sha256':builds[0],'repeat_build_identical':True,'hardware_tested':False,'flash_ready':False}
+            'archive_sha256':builds[0],'repeat_build_identical':True,'complete_firmware':complete,
+            'hardware_tested':False,'flash_ready':False}
     (out/'verification.json').write_text(json.dumps(report,indent=2)+'\n')
     print(json.dumps(report,indent=2))
     return 0

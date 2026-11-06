@@ -7,3 +7,5 @@ __pycache__/
 *.cpio
 *.cpio.sha256
 .DS_Store
+backups/
+private-e5770-backup/

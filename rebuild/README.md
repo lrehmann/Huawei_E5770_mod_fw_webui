@@ -1,7 +1,8 @@
 # Remaining dependency and kernel work
 
-The first milestone changes readable scripts, configuration, artwork and web
-code. It does not relabel old vendor binaries as modern firmware.
+The fork changes readable scripts, configuration, artwork and web code. Complete
+experimental BIN packages now include the preserved base boot/kernel/modem
+components. These assemblies do not modernize those old vendor binaries.
 
 1. Rebuild a minimal companion HTTP stack and a compatible BusyBox from reviewed,
    pinned maintained sources. BusyBox's official site currently labels 1.36.1

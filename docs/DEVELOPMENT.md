@@ -13,6 +13,7 @@
 | `tools/balong.py`, `tools/inspect_inputs.py` | Read-only container/CRC/archive inspection |
 | `tools/audit.py`, `audit` | Inventory, pinned hashes, provenance and audit evidence |
 | `tools/build.py`, `tools/check.py`, `tests` | Archive building and offline regression checks |
+| `tools/build_firmware.py`, `tools/firmware.py`, `firmware/base-layout.json` | Complete container assembly, immutable base checks, original owner/mountpoint metadata |
 
 The native System menu opens a protected launcher; the companion then rechecks
 the native login independently. It accepts a literal private IPv4 LAN address.
@@ -36,7 +37,10 @@ primary cross-site-write defense. Native-session tests are mocked offline.
 
 ## Explicit research switches
 
-These are **not created** by the build or customization UI:
+These persistent markers are **not created** by the customization UI. The
+optional personalization build instead places a read-only
+`/system/etc/cozy/admin-enabled` marker in its system image. The default build
+does not include that marker; `cozy_admin_disable` overrides both enable paths.
 
 | File under `/data/userdata` | Effect |
 | --- | --- |

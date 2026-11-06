@@ -3,7 +3,7 @@
   "scope": "repository filesystem trees; static inspection, not a complete binary security audit",
   "counts": {
     "files": 1329,
-    "bytes": 32413301,
+    "bytes": 32413346,
     "elfs": 131,
     "text_files_scanned": 927,
     "xml_valid": 206,
@@ -2632,8 +2632,8 @@
     {
       "path": "system/etc/autorun.sh",
       "kind": "file",
-      "bytes": 2456,
-      "sha256": "aee48ef301f21c3a62b409b72aeddd619ca8f4b41526eea3d288d2dfc1f83872"
+      "bytes": 2501,
+      "sha256": "22b7134fcb91f9cf8ae91da0176dc36dbd27d868c37d8a4753fc4e0e723e3b90"
     },
     {
       "path": "system/etc/cozy/animation.awk",

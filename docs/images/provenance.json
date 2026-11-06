@@ -1,0 +1,15 @@
+{
+  "description": "Unmodified hardware reference photos supplied by the user; appearance does not establish firmware compatibility.",
+  "files": [
+    {
+      "file": "huawei-hotspot-white.png",
+      "sha256": "fed413d603317928c0e2f2e84f2237200e59a087487fba5e10a499da634e581b",
+      "bytes": 57536
+    },
+    {
+      "file": "huawei-hotspot-black.png",
+      "sha256": "5df78a7bc2029045c0266d795c4dbc448786b5e2f23ba128910c7391ae192428",
+      "bytes": 663195
+    }
+  ]
+}

@@ -118,6 +118,6 @@ def cpio_entries(data, start=0):
         pos = begin+size
         pos += (-(pos-start)) % 4
         if name == 'TRAILER!!!':
-            return
+            return pos
         yield {'name':name,'mode':fields[1],'uid':fields[2],'gid':fields[3],
                'size':size,'data':payload}

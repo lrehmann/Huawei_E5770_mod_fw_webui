@@ -24,5 +24,11 @@ The Balong inspection utility implements the documented container layout and
 standard CRC16/X25 algorithm; layout reference:
 [forth32/balongflash](https://github.com/forth32/balongflash).
 
+The complete experimental firmware files reuse the pinned upstream vendor/base
+components and their existing notices. No new OEM signature, manufacturer
+approval or hardware compatibility certification is claimed. The two hardware
+reference photographs in `docs/images/` were supplied by the user and are copied
+unchanged; their original image rights are not relicensed by this repository.
+
 New Cozy tools, frontend, tests, glyphs and artwork are source additions for this
 fork. No ownership or relicensing claim is made over third-party material.

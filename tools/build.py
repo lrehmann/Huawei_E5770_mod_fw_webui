@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Create deterministic, root-owned experimental filesystem archives, without sudo."""
+"""Create canonical experimental filesystems with vendor metadata, without sudo."""
 from pathlib import Path
 import argparse
 import hashlib
@@ -10,9 +10,9 @@ import subprocess
 from pixels import ROOT
 
 
-def newc_entry(stream, name, data, mode, inode, epoch):
+def newc_entry(stream, name, data, mode, inode, epoch, uid=0, gid=0):
     encoded = name.encode() + b'\0'
-    values = [inode,mode,0,0,2 if stat.S_ISDIR(mode) else 1,epoch,len(data),0,0,0,0,len(encoded),0]
+    values = [inode,mode,uid,gid,2 if stat.S_ISDIR(mode) else 1,epoch,len(data),0,0,0,0,len(encoded),0]
     header = b'070701' + ''.join(f'{v:08x}' for v in values).encode()
     stream.write(header + encoded)
     stream.write(b'\0' * ((-(110+len(encoded))) % 4))
@@ -20,7 +20,13 @@ def newc_entry(stream, name, data, mode, inode, epoch):
     stream.write(b'\0' * ((-len(data)) % 4))
 
 
-def package(source, target, epoch):
+def package(source, target, epoch, layout=None):
+    if layout is not None:
+        from firmware import collect_filesystem, make_cpio
+        values = collect_filesystem(source.name, layout, root=source.parent)
+        target.write_bytes(make_cpio(values, epoch))
+        return [{'path': e['name'], 'mode': oct(e['mode']), 'uid': e['uid'], 'gid': e['gid'],
+                 'bytes': len(e['data']), 'sha256': hashlib.sha256(e['data']).hexdigest()} for e in values]
     paths = [source] + sorted(source.rglob('*'))
     entries = []
     with target.open('wb') as stream:
@@ -48,6 +54,22 @@ def package(source, target, epoch):
     return entries
 
 
+def validate_sources(root=ROOT):
+    lock=json.loads((root/'audit/base-lock.json').read_text())
+    for file,expected in lock['binaries'].items():
+        if hashlib.sha256((root/file).read_bytes()).hexdigest()!=expected:
+            raise ValueError(f'Unreviewed binary/ABI change: {file}; port and review the hooks before updating the lock')
+    default = root/'system/etc/cozy/default.profile'
+    profile = default.read_bytes()
+    if len(profile)>8192 or any(c!=10 and not 32<=c<=126 for c in profile):
+        raise ValueError('Invalid bytes in default profile')
+    subprocess.run(['awk','-f',str(root/'system/etc/cozy/profile.awk'),str(default)],check=True)
+    for file in ('system/bin/cozy-admin','system/bin/cozy-apply','system/bin/cozy-validate',
+                 'system/www/cozy/cgi-bin/settings.cgi','system/www/cozy/cgi-bin/ui.cgi'):
+        if not os.access(root/file,os.X_OK):
+            raise ValueError(f'Missing executable bit: {file}')
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--experimental',action='store_true',help='acknowledge these are unvalidated filesystem archives')
@@ -61,26 +83,17 @@ def main():
     epoch = int(os.environ.get('SOURCE_DATE_EPOCH',(ROOT/'system/etc/cozy/build-epoch').read_text().strip()))
     if not 0 <= epoch <= 0xffffffff:
         parser.error('Invalid SOURCE_DATE_EPOCH')
-    lock=json.loads((ROOT/'audit/base-lock.json').read_text())
-    for file,expected in lock['binaries'].items():
-        if hashlib.sha256((ROOT/file).read_bytes()).hexdigest()!=expected:
-            raise ValueError(f'Unreviewed binary/ABI change: {file}; port and review the hooks before updating the lock')
-    default = ROOT/'system/etc/cozy/default.profile'
-    profile = default.read_bytes()
-    if len(profile)>8192 or any(c!=10 and not 32<=c<=126 for c in profile):
-        raise ValueError('Invalid bytes in default profile')
-    subprocess.run(['awk','-f',str(ROOT/'system/etc/cozy/profile.awk'),str(default)],check=True)
-    for file in ('system/bin/cozy-admin','system/bin/cozy-apply','system/www/cozy/cgi-bin/settings.cgi'):
-        if not os.access(ROOT/file,os.X_OK):
-            raise ValueError(f'Missing executable bit: {file}')
+    validate_sources()
     output.mkdir(parents=True,exist_ok=True)
     manifest = {'format':'cozy-experimental-filesystems-v1','flash_ready':False,
                 'source_date_epoch':epoch,'source_commit':subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),
                 'working_tree_dirty':bool(subprocess.check_output(['git','status','--porcelain'],cwd=ROOT)),
                 'partitions':{}}
+    from firmware import load_layout
+    layout = load_layout()
     for name in ('app','system','web'):
         target = output/f'{name}-mod.cpio'
-        entries = package(ROOT/name,target,epoch)
+        entries = package(ROOT/name,target,epoch,layout)
         digest = hashlib.file_digest(target.open('rb'),'sha256').hexdigest()
         (output/f'{target.name}.sha256').write_text(f'{digest}  {target.name}\n')
         manifest['partitions'][name] = {'file':target.name,'sha256':digest,'bytes':target.stat().st_size,'entries':entries}

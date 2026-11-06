@@ -1,0 +1,91 @@
+{
+  "version": "0.1.0-alpha.1",
+  "hardware_validated": false,
+  "oem_signature_validated": false,
+  "direct_stock_install_validated": false,
+  "complete_flash_set": true,
+  "standard": {
+    "verified": true,
+    "version": "0.1.0-alpha.1",
+    "images": {
+      "firmware": {
+        "file": "Cozy_E5770_0.1.0-alpha.1_FW.BIN",
+        "sha256": "6fc694940b35dd2af95b0e0095e9f61f75b2988b88963ccf5869735c08411ed4",
+        "partitions": 10
+      },
+      "webui": {
+        "file": "Cozy_E5770_0.1.0-alpha.1_WEBUI.BIN",
+        "sha256": "204345edfa0d903cb77a86f189bc72a9409fb586619a38b4acbf7310c62123dc",
+        "partitions": 3
+      }
+    },
+    "admin_enabled_by_default": false,
+    "hardware_validated": false,
+    "oem_signature_validated": false
+  },
+  "personalization": {
+    "verified": true,
+    "version": "0.1.0-alpha.1",
+    "images": {
+      "firmware": {
+        "file": "Cozy_E5770_0.1.0-alpha.1_ADMIN_FW.BIN",
+        "sha256": "efa450dd247e642cc3dc539669780dbe10f0ba53736f5a6cb03f83f3548b1619",
+        "partitions": 10
+      },
+      "webui": {
+        "file": "Cozy_E5770_0.1.0-alpha.1_WEBUI.BIN",
+        "sha256": "204345edfa0d903cb77a86f189bc72a9409fb586619a38b4acbf7310c62123dc",
+        "partitions": 3
+      }
+    },
+    "admin_enabled_by_default": true,
+    "hardware_validated": false,
+    "oem_signature_validated": false
+  },
+  "all_header_and_block_crcs_valid": true,
+  "all_source_bytes_paths_modes_owners_match": true,
+  "unchanged_vendor_components_match_pinned_base": true,
+  "rebuild_from_committed_templates_matches_original_base_build": true,
+  "optional_local_archive_fetch_and_two_image_extraction_passed": true,
+  "base_metadata_restored_empty_directories": [
+    "app/webroot",
+    "web/WebApp/common/autorun"
+  ],
+  "native_flasher": {
+    "source_commit": "bf43faa4b5f60205a7950b8ecee5fe81a3226239",
+    "binary_sha256": "8419bf60d9539943f0c71beb3f84d668582791eb2432d82c63f144b264e6fad3",
+    "mode": "offline -m; exits before serial-port open",
+    "hardware_flashing_tested": false,
+    "results": [
+      {
+        "file": "Cozy_E5770_0.1.0-alpha.1_FW.BIN",
+        "exit_code": 0,
+        "partition_rows": 10,
+        "rows": [
+          " 00 0000005c   261670              Fastboot",
+          " 01 0003ff64     7120              M3Boot_R11",
+          " 02 00041b9c     2048              M3Boot-ptable",
+          " 03 00042400  5607552              Kernel_R11",
+          " 04 0059bf98  8667488              VxWorks_R11",
+          " 05 00de11e4    45728              M3Image_R11",
+          " 06 00dec500  2380084              DSP_R11",
+          " 07 01031b24  1655034              Nvdload_R11",
+          " 08 011c5fac 19850240              System",
+          " 09 024b69ec  3029504              APP"
+        ]
+      },
+      {
+        "file": "Cozy_E5770_0.1.0-alpha.1_WEBUI.BIN",
+        "exit_code": 0,
+        "partition_rows": 3,
+        "rows": [
+          " 00 0000005c      128              Oeminfo",
+          " 01 00000140  5517278              CDROMISO",
+          " 02 00543c08  9787904              WEBUI"
+        ]
+      }
+    ]
+  },
+  "unit_tests": 42,
+  "source_check_report": "audit/verification.json"
+}

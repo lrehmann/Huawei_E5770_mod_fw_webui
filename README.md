@@ -1,16 +1,40 @@
 # Cozy for Huawei E5770
 
 A personal firmware fork with friendly pixel screens, a customization menu, and
-the first security and stability repairs to the E5770 mod.
+security and stability repairs to the E5770 mod.
 
-**Experimental source milestone. No device has been flashed. This is not a
-security-audited release or a ready-to-flash firmware image.** The remaining
-closed-source components and old kernel prevent that claim. Read
-[the audit](docs/AUDIT.md) for the evidence, fixes, and open work.
+**Complete experimental firmware and WebUI images are included.** Offline checks
+cover format, all partition CRCs, source contents and reproducible builds. No
+device has been flashed or hardware-qualified; full security auditing remains
+open. Read [INSTALL.md](docs/INSTALL.md) before a device write and
+[the audit](docs/AUDIT.md) for the evidence and remaining work.
+
+| White hardware reference | Black hardware reference |
+| --- | --- |
+| ![User-supplied white Huawei hotspot reference photo](docs/images/huawei-hotspot-white.png) | ![User-supplied black Huawei hotspot reference photo](docs/images/huawei-hotspot-black.png) |
+
+User-supplied appearance photos. Confirm the actual variant from its label/API.
 
 Based on upstream commit `a4b7711f7564bfd408ce925564b128e05c20313d`, firmware
 `21.329.01.00.00`, WebUI `17.100.19.01.00`, mod `v2.3.2`. The installed
 `21.318.01.00.00` firmware needs a separately verified migration/recovery path.
+
+## Firmware and installation
+
+- [Download the complete standard set](https://github.com/lrehmann/Huawei_E5770_mod_fw_webui/releases/download/cozy-v0.1.0-alpha.1/Cozy_E5770_0.1.0-alpha.1_standard.zip)
+- [Optional personalization-enabled set](https://github.com/lrehmann/Huawei_E5770_mod_fw_webui/releases/download/cozy-v0.1.0-alpha.1/Cozy_E5770_0.1.0-alpha.1_personalization.zip)
+- [Committed BIN images, manifest and checksums](firmware/experimental/)
+- [Linux/Windows installation instructions](docs/INSTALL.md) · [Backup and recovery](docs/RECOVERY.md) · [Rebuild instructions](docs/BUILD.md)
+
+The two BIN files retain all **10 main-firmware partitions and 3 WebUI-package
+partitions** from the pinned base, including its kernel, modem, bootloader,
+partition table, OEM metadata and ISO. Cozy rebuilds `system`, `app` and `web`.
+Device-specific NV/calibration backups remain separate.
+
+Upstream supports an already compatible **modified or technological/service
+firmware** as the installation starting point. Direct installation from stock
+`21.318.01.00.00` is not verified. The images carry the base transport/signature
+metadata and are not newly OEM-signed. These are development builds.
 
 ## First changes
 
@@ -27,8 +51,9 @@ Based on upstream commit `a4b7711f7564bfd408ce925564b128e05c20313d`, firmware
 - Updated Mozilla CA roots, safer web authorization defaults, escaped device-info
   values, no unconditional backward clock reset, and no forced 15-minute idle TCP
   timeout or disabled connection-tracking checksums.
-- Root-owned deterministic filesystem builds, SHA-256 manifests, ABI locks,
-  regression checks, and GitHub Actions.
+- Deterministic full-container and filesystem builds, preserved vendor owners
+  and empty mount directories, SHA-256 manifests, ABI locks, regression checks,
+  and GitHub Actions.
 
 ![Cozy settings preview](audit/ui-preview.jpg)
 
@@ -47,22 +72,26 @@ profiles contain preferences and screen bytes, with no session credentials.
 
 ```sh
 python3 tools/check.py
+python3 tools/build_firmware.py --check
+python3 tools/build_firmware.py --experimental
 ./build.sh --experimental
 ```
 
-Build results are in `build/experimental/`: three CPIO filesystem archives,
-checksums, and a manifest. They have no Huawei update envelope, signature,
-bootloader, kernel, modem, or recovery image. The tools never flash a device.
+Full BIN results are in `build/complete-firmware/`. Standalone CPIO intermediates
+are in `build/experimental/`; installation uses the complete BIN pair.
+Build/verification tools never flash a device.
 `SOURCE_DATE_EPOCH` can override the archive timestamps. Generated screen assets
 can be refreshed with `python3 tools/generate_assets.py`.
 
 ## Device implementation
 
 On a validated development device, the companion listens on the private `br0`
-IPv4 address at port 8080. It stays **disabled by default** while native-session,
-boot, and firewall compatibility remain untested. `cozy-admin enable` is the
-explicit development opt-in; `cozy-admin disable` stops it and removes its boot
-opt-in. Do not use the old BusyBox HTTP daemon on untrusted networks.
+IPv4 address at port 8080. The standard set keeps it **disabled by default** while
+native-session, boot, and firewall compatibility remain untested. The optional
+personalization build (`--enable-admin`) explicitly enables its boot default.
+An existing trusted root shell can also use `cozy-admin enable`;
+`cozy-admin disable` stops it and overrides either boot default. Do not use the
+old BusyBox HTTP daemon on untrusted networks.
 
 The user must already be signed in to the stock admin interface at the same
 literal LAN IP. Native state `0`, the original session ID, a per-boot CSRF token,

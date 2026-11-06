@@ -1,0 +1,127 @@
+{
+  "schema_version": 1,
+  "format": "cozy-complete-experimental-firmware",
+  "version": "0.1.0-alpha.1",
+  "base_release": "v2.3.2",
+  "firmware_version": "21.329.01.00.00",
+  "webui_version": "17.100.19.01.00",
+  "source_date_epoch": 1793836800,
+  "admin_enabled_by_default": false,
+  "filesystem_source_sha256": {
+    "app": "759311039575b588dbc247980302c15bab971634fa8bd311a7360f70536d82b7",
+    "system": "305706904af509309309a215b826216e100fbd064b5418d55ded18c106d4c8f3",
+    "web": "e9fdb428bfdeb829ab18be11da759470e3085720ef452cafc612d133845f1728"
+  },
+  "complete_flash_set": true,
+  "hardware_validated": false,
+  "oem_signature_validated": false,
+  "direct_stock_install_validated": false,
+  "installation_precondition": "Compatible E5770 modified/technological firmware and a verified recovery path",
+  "images": {
+    "firmware": {
+      "file": "Cozy_E5770_0.1.0-alpha.1_FW.BIN",
+      "bytes": 41527832,
+      "sha256": "6fc694940b35dd2af95b0e0095e9f61f75b2988b88963ccf5869735c08411ed4",
+      "partitions": [
+        {
+          "name": "fastboot",
+          "code": "00110000",
+          "bytes": 261670,
+          "sha256": "5272a2f490a04964fa48364a8ce9505a054ab72d7330d81f3c3748ee62866ac6",
+          "changed": false
+        },
+        {
+          "name": "m3boot",
+          "code": "00200000",
+          "bytes": 7120,
+          "sha256": "50c7f9117da05688880a0739ed1f5ee06d2a04e49bdbb4fdc143c8d03b7ef976",
+          "changed": false
+        },
+        {
+          "name": "ptable",
+          "code": "00010000",
+          "bytes": 2048,
+          "sha256": "4003fdff8593ec2fca4f75d0c22622c0cf11b7b2d65f03455ef8cfb25451182d",
+          "changed": false
+        },
+        {
+          "name": "kernel",
+          "code": "00090000",
+          "bytes": 5607552,
+          "sha256": "4237d3f62b1d2e18386a21bae282218045240a27c1ffe5de00b410a251a7b80c",
+          "changed": false
+        },
+        {
+          "name": "vxworks",
+          "code": "00220000",
+          "bytes": 8667488,
+          "sha256": "39a987f1a6079229f8517b3f420f0a05a5cb8fbad9206e3b7341b6fad4f87fb9",
+          "changed": false
+        },
+        {
+          "name": "m3image",
+          "code": "00230000",
+          "bytes": 45728,
+          "sha256": "6b360e7388d02ece3ecf798d9687047fcf9cc65f878142e3251bf4c62630e8bb",
+          "changed": false
+        },
+        {
+          "name": "dsp",
+          "code": "00240000",
+          "bytes": 2380084,
+          "sha256": "0e4fd53204d7c4b6bd2906ac39bcfd0a1a9758e51bf507ee491636a3947127e0",
+          "changed": false
+        },
+        {
+          "name": "nvdload",
+          "code": "00250000",
+          "bytes": 1655034,
+          "sha256": "84919cbbcc4c35c9f02da69898baa27ab985a3c419fbc634f2e9a69d9b109e40",
+          "changed": false
+        },
+        {
+          "name": "system",
+          "code": "00590000",
+          "bytes": 19850240,
+          "sha256": "94d7280f20ddeea9a41f694d6186fa62891991ef7da25ffddc919f16fc36daf4",
+          "changed": true
+        },
+        {
+          "name": "app",
+          "code": "005a0000",
+          "bytes": 3029504,
+          "sha256": "493d2d2adeccddd3e58863a7381a4e9ab4612ebc000bf05300f44988ff4c1a95",
+          "changed": true
+        }
+      ]
+    },
+    "webui": {
+      "file": "Cozy_E5770_0.1.0-alpha.1_WEBUI.BIN",
+      "bytes": 15313176,
+      "sha256": "204345edfa0d903cb77a86f189bc72a9409fb586619a38b4acbf7310c62123dc",
+      "partitions": [
+        {
+          "name": "oeminfo",
+          "code": "000a0000",
+          "bytes": 128,
+          "sha256": "0cca9f3050a23d3a61b1ea01d1ee407d3ae503b6596d88d8d22a1d8a7c295fe4",
+          "changed": false
+        },
+        {
+          "name": "cdrom",
+          "code": "000b0000",
+          "bytes": 5517278,
+          "sha256": "bc75382769c6a38b5799ad3e9fb9fd2b6d667520a699fa8314fb3a4cbab10f40",
+          "changed": false
+        },
+        {
+          "name": "web",
+          "code": "005b0000",
+          "bytes": 9787904,
+          "sha256": "4f97efc2aeb264a444f2e9974076cbd9af8634fd5fd23d204777f24fca06e7c8",
+          "changed": true
+        }
+      ]
+    }
+  }
+}

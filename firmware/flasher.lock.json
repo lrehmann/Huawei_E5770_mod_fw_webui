@@ -1,0 +1,16 @@
+{
+  "repository": "https://github.com/forth32/balongflash",
+  "commit": "bf43faa4b5f60205a7950b8ecee5fe81a3226239",
+  "offline_inspection_flag": "-m",
+  "linux_build_dependencies": [
+    "git",
+    "build-essential",
+    "zlib1g-dev"
+  ],
+  "hardware_flashing_tested": false,
+  "windows_binary": {
+    "path": "winbuild/Release/balong_flash.exe",
+    "sha256": "f89abc07653a569b84bc1350d2731bc7fd3b201a66a35a8799d7d5d94d5f915b",
+    "bytes": 156672
+  }
+}

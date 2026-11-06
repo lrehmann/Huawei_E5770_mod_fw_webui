@@ -1,6 +1,8 @@
 name: Firmware source checks
 on:
   push:
+    branches:
+      - '**'
   pull_request:
 permissions:
   contents: read
@@ -13,5 +15,5 @@ jobs:
         with:
           fetch-depth: 0
           persist-credentials: false
-      - name: Validate code, security behavior, assets and deterministic archives
+      - name: Validate code, security behavior, complete firmware and deterministic archives
         run: python3 tools/check.py

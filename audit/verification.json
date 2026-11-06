@@ -1,12 +1,12 @@
 {
   "offline_checks_passed": true,
-  "unit_tests": 32,
+  "unit_tests": 42,
   "shell_files_checked": 13,
   "shellcheck_available": true,
   "javascript_files_checked": 6,
   "inventory": {
     "files": 1329,
-    "bytes": 32413301,
+    "bytes": 32413346,
     "elfs": 131,
     "text_files_scanned": 927,
     "xml_valid": 206,
@@ -14,11 +14,30 @@
     "gzip_checked": 494
   },
   "archive_sha256": {
-    "app": "ab805e43a526ee9eef2693f1baade920ad5a4cc55e675fa895681560c1f27345",
-    "system": "72f2475404c1fa2324dd09c1faad055c8a21c0ca64f9b13bc2ca11e17fca135e",
-    "web": "da5eb76ea93faa40805ce192a93b19109b8c080a7089c85ed2621189fa5d8230"
+    "app": "493d2d2adeccddd3e58863a7381a4e9ab4612ebc000bf05300f44988ff4c1a95",
+    "system": "94d7280f20ddeea9a41f694d6186fa62891991ef7da25ffddc919f16fc36daf4",
+    "web": "4f97efc2aeb264a444f2e9974076cbd9af8634fd5fd23d204777f24fca06e7c8"
   },
   "repeat_build_identical": true,
+  "complete_firmware": {
+    "verified": true,
+    "version": "0.1.0-alpha.1",
+    "images": {
+      "firmware": {
+        "file": "Cozy_E5770_0.1.0-alpha.1_FW.BIN",
+        "sha256": "6fc694940b35dd2af95b0e0095e9f61f75b2988b88963ccf5869735c08411ed4",
+        "partitions": 10
+      },
+      "webui": {
+        "file": "Cozy_E5770_0.1.0-alpha.1_WEBUI.BIN",
+        "sha256": "204345edfa0d903cb77a86f189bc72a9409fb586619a38b4acbf7310c62123dc",
+        "partitions": 3
+      }
+    },
+    "admin_enabled_by_default": false,
+    "hardware_validated": false,
+    "oem_signature_validated": false
+  },
   "hardware_tested": false,
   "flash_ready": false
 }

@@ -1,8 +1,9 @@
-# E5770 audit — first source milestone
+# E5770 audit — experimental complete flash set
 
 Reviewed on November 5, 2026 (America/Los_Angeles).
 
-The source fork and a broad static inventory are complete for this milestone.
+The source fork, complete flash-set assembly and a broad static inventory are
+complete for this milestone.
 **A complete firmware security audit is not complete.** Neither the proprietary
 baseband/bootloader implementations nor all vendor daemons have corresponding
 source here, and the new image has not been run on hardware. No stability,
@@ -61,6 +62,7 @@ Hashes and container evidence are in [provenance.json](../audit/provenance.json)
 | Medium | Wi-Fi password display was enabled by default. | Disabled that WebUI default. Existing NV settings and alternate screen paths may override it; verify actual behavior after a backed-up deployment. WPS configuration/reachability still needs separate assessment. |
 | Medium | New customization service adds a privileged parser and an old BusyBox HTTP surface. | Implemented bounded ASCII-only data parsing, exact schema, no `eval`/`source`, per-request native-session verification, per-boot CSRF, Host/Referer checks, atomic profile writes, LAN binding/filtering and no CORS. It remains off by default. Replace or validate the HTTP implementation and native session semantics before enabling on hardware. |
 | Medium | OLED hooks and ECM/MAC patches depend on exact binary addresses/ABI. | Added SHA-256 build locks for the critical unchanged application binaries. Skipped ECM menu selection without its opt-in. This does not validate every kernel-address assumption or make the installed 21.318 kernel compatible with the 21.329 application image. |
+| High | A Git-only filesystem rebuild omitted empty `app/webroot` and `WebApp/common/autorun` directories and discarded vendor owner metadata. | Added a complete base layout and canonical filesystem recipe. Both CPIO and full-image builders now restore the empty directories, preserve vendor modes/UID/GID, and fail on missing base files without reviewed deletions. Regression tests check the mountpoint and ownership. |
 | Medium | The separately available 128×64 OLED hook source has inclusive upper-bound checks on menu/script indices. | Prepared `rebuild/oled-bounds.patch` and verified it applies to the pinned source. It rejects invalid mapping indices and excludes the past-the-end script index. The binary library is unchanged; the fix needs a rebuild and ARM/hardware validation. |
 | Low | Discriminatory wording appears in upstream release documentation; requested startup removal. | New fork text is respectful. Every frame in the known startup/shutdown animation entries was replaced with new artwork. The described slur was not found as an actual text startup asset in these matching filesystem trees. Two raw byte search hits were a blocklisted domain and ARM instruction bytes, not displayed messages. Physical startup, fast-start, charge-only and recovery paths are still unverified. |
 
@@ -91,9 +93,23 @@ regressions, all XML/gzip assets, and two complete deterministic CPIO builds.
 Symlink permissions are normalized to 0777 so macOS and Linux produce the same
 archive bytes; Git does not record host symlink permission bits.
 The current count and archive hashes are in [verification.json](../audit/verification.json).
-GitHub Actions runs the same offline command on Linux.
+GitHub Actions runs the same offline command on Linux, including verification of
+the committed complete images against all source filesystem bytes and metadata.
+
+The complete two-image set retains the 10 main firmware partitions and 3
+WebUI-package partitions from the pinned base. Only `system`, `app` and `web`
+are replaced. Both prefixes, all other payload hashes and the base signature
+metadata remain unchanged. All header/block CRCs are recalculated and verified.
+The native upstream Balong flasher was compiled and used in offline `-m` mode;
+it recognized both images and their 10/3 partition maps without CRC errors.
+No serial port was opened. Details are in
+[complete-firmware-validation.json](../audit/complete-firmware-validation.json).
 
 The tests use isolated host fixtures and mocked native APIs/firewalls. They do
 not demonstrate modem throughput, power stability, battery safety, a successful
-boot, native-session compatibility, or recovery. No flashable signed firmware is
-published. The first-release gates are listed in [DEVELOPMENT.md](DEVELOPMENT.md).
+boot, native-session compatibility, or recovery. Complete experimental BIN files
+are published with their existing base transport/signature metadata; no new OEM
+signature is created or authenticated. Direct installation from stock 21.318
+remains unverified. The hardware gates are listed in
+[DEVELOPMENT.md](DEVELOPMENT.md), with supported-path instructions in
+[INSTALL.md](INSTALL.md).

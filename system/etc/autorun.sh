@@ -58,7 +58,9 @@ fi
 [ -f /data/userdata/entware_autorun ] && /opt/etc/init.d/rc.unslung start
 
 # The experimental companion remains opt-in until device validation is complete.
-if [ -f /data/userdata/cozy_admin_enable ]; then /system/bin/cozy-admin start & fi
+if [ -f /data/userdata/cozy_admin_enable ] || [ -f /system/etc/cozy/admin-enabled ]; then
+    /system/bin/cozy-admin start &
+fi
 
 # fix_ttl.sh 2, dns_over_tls.sh and anticenshorship.sh are called
 # from /system/bin/iptables-fixttl-wrapper.sh by /app/bin/npdaemon.
