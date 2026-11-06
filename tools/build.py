@@ -36,6 +36,10 @@ def package(source, target, epoch):
             else:
                 raise ValueError(f'Unsupported filesystem object: {p}')
             mode = stat.S_IFMT(s.st_mode) | (stat.S_IMODE(s.st_mode) & 0o777)
+            # Git tracks symlink targets, not symlink permission bits. macOS
+            # checks these out as 0755 while Linux uses 0777; device links use 0777.
+            if stat.S_ISLNK(s.st_mode):
+                mode = stat.S_IFLNK | 0o777
             newc_entry(stream,name,data,mode,i,epoch)
             entries.append({'path':name,'mode':oct(mode),'bytes':len(data),
                             'sha256':hashlib.sha256(data).hexdigest()})

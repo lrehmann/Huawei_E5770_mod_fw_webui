@@ -393,6 +393,7 @@ class Containers(unittest.TestCase):
             self.assertEqual((temp/'one.cpio').read_bytes(),(temp/'two.cpio').read_bytes())
             items={e['name']:e for e in cpio_entries((temp/'one.cpio').read_bytes())}
             self.assertEqual(items['link']['data'],b'/system/bin/busybox');self.assertTrue(stat.S_ISLNK(items['link']['mode']))
+            self.assertEqual(stat.S_IMODE(items['link']['mode']),0o777)
             self.assertTrue(all(e['uid']==e['gid']==0 for e in items.values()))
 
     def test_reader_rejects_unsafe_names_and_truncated_payloads(self):

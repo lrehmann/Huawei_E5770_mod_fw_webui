@@ -88,6 +88,8 @@ editing and exported profile content. No console errors were observed.
 
 `python3 tools/check.py` checks shell/JavaScript syntax, the automated security
 regressions, all XML/gzip assets, and two complete deterministic CPIO builds.
+Symlink permissions are normalized to 0777 so macOS and Linux produce the same
+archive bytes; Git does not record host symlink permission bits.
 The current count and archive hashes are in [verification.json](../audit/verification.json).
 GitHub Actions runs the same offline command on Linux.
 
